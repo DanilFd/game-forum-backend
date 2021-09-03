@@ -2,7 +2,7 @@
 from rest_framework import generics
 
 from news.models import NewsItem
-from news.serializers import CreateNewsItemSerializer
+from news.serializers import CreateNewsItemSerializer, ListNewsItemSerializer
 
 
 class CreateNewsItemView(generics.CreateAPIView):
@@ -10,5 +10,5 @@ class CreateNewsItemView(generics.CreateAPIView):
 
 
 class ListNewsItemView(generics.ListAPIView):
-    serializer_class = CreateNewsItemSerializer
+    serializer_class = ListNewsItemSerializer
     queryset = NewsItem.objects.all()

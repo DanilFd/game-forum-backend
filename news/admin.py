@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 
 # Register your models here.
-from news.models import NewsItem
+from news.models import NewsItem, NewsCategory
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
@@ -18,3 +18,11 @@ class NewsAdminForm(forms.ModelForm):
 class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
     readonly_fields = ["views_count"]
+    list_display = ["title"]
+
+
+@admin.register(NewsCategory)
+class CategoryNewsAdmin(admin.ModelAdmin):
+    list_display = ["title"]
+    readonly_fields = ["slug"]
+

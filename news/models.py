@@ -1,7 +1,9 @@
-from django.db import models
+
+from django.db import models, IntegrityError
 
 # Create your models here.
 from django.utils.text import slugify
+from rest_framework.exceptions import ValidationError
 
 
 class NewsCategory(models.Model):
@@ -9,8 +11,8 @@ class NewsCategory(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
 
-    title = models.CharField(verbose_name="Заголовок", max_length=25)
-    slug = models.SlugField()
+    title = models.CharField(verbose_name="Заголовок", max_length=25, unique=True)
+    slug = models.SlugField(verbose_name="Путь", unique=True)
 
     def save(self, *args, **kwargs):
         translated = self.title.translate(
@@ -19,10 +21,18 @@ class NewsCategory(models.Model):
                 "abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA"
             ))
         self.slug = slugify(translated)
-        super(NewsCategory, self).save(*args, **kwargs)
+        try:
+            super(NewsCategory, self).save(*args, **kwargs)
+
+        except IntegrityError as err:
+            print(err.message)
+            if 'UNIQUE constraint' in err.message:
+                raise ValidationError({
+                    'Категория': 'Категория уже существует.'
+                })
 
     def __str__(self):
-        return self.title
+        return self.title.upper()
 
 
 class NewsItem(models.Model):

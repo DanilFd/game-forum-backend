@@ -19,6 +19,7 @@ class NewsAdmin(admin.ModelAdmin):
     form = NewsAdminForm
     readonly_fields = ["views_count"]
     list_display = ["title"]
+    search_fields = ["title"]
 
 
 @admin.register(NewsCategory)

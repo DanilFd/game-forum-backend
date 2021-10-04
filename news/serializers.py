@@ -3,19 +3,19 @@ from rest_framework import serializers
 from news.models import NewsItem, NewsCategory
 
 
-class CreateNewsItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NewsItem
-        fields = "__all__"
-
-
 class ListNewsItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "image", "creation_date", "category"]
+        fields = ["id", "title", "image", "creation_date", "categories"]
 
 
-class CreateCategoryNewsSerializer(serializers.ModelSerializer):
+class DetailNewsItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = ["id", "title", "content", "views_count", "creation_date"]
+
+
+class ListNewsCategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsCategory
-        fields = "__all__"
+        fields = ["title", "slug", "id"]

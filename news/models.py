@@ -45,7 +45,7 @@ class NewsItem(models.Model):
     content = models.TextField(verbose_name="Контент")
     views_count = models.IntegerField(verbose_name="Количество просмотров", default=0)
     creation_date = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
-    category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, verbose_name="Категория", related_name="test")
+    categories = models.ManyToManyField(NewsCategory, verbose_name="Категории")
 
     def __str__(self):
         return self.title

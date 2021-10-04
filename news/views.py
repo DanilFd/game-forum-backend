@@ -4,11 +4,8 @@ from rest_framework import generics
 
 from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
-from news.serializers import CreateNewsItemSerializer, ListNewsItemSerializer, CreateCategoryNewsSerializer
-
-
-class CreateNewsItemView(generics.CreateAPIView):
-    serializer_class = CreateNewsItemSerializer
+from news.serializers import ListNewsItemSerializer, \
+    DetailNewsItemSerializer, ListNewsCategoriesSerializer
 
 
 class ListNewsItemView(generics.ListAPIView):
@@ -18,10 +15,11 @@ class ListNewsItemView(generics.ListAPIView):
     filterset_class = NewsFilterSet
 
 
-class CreateCategoryNewsView(generics.CreateAPIView):
-    serializer_class = CreateCategoryNewsSerializer
-
-
 class ListCategoryNewsView(generics.ListAPIView):
-    serializer_class = CreateCategoryNewsSerializer
+    serializer_class = ListNewsCategoriesSerializer
     queryset = NewsCategory.objects.all()
+
+
+class DetailNewsItemView(generics.RetrieveAPIView):
+    serializer_class = DetailNewsItemSerializer
+    queryset = NewsItem.objects.all()

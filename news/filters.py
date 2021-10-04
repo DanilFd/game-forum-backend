@@ -7,5 +7,5 @@ from news.models import NewsItem
 class NewsFilterSet(FilterSet):
     class Meta:
         model = NewsItem
-        fields = ["category"]
-    category = CharFilter(field_name="category__slug")
+        fields = ["categories"]
+    category = CharFilter(field_name="categories__slug")

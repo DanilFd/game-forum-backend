@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
 
-
 from news.models import NewsItem, NewsCategory
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
@@ -26,4 +25,5 @@ class NewsAdmin(admin.ModelAdmin):
 class CategoryNewsAdmin(admin.ModelAdmin):
     list_display = ["title"]
     exclude = ["slug"]
+
 

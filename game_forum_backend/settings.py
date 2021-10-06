@@ -144,11 +144,14 @@ CKEDITOR_CONFIGS = {
             {'name': 'basicstyles',
              'items': ['Bold', 'Italic', 'Underline', 'Strike']},
             ['NumberedList', 'BulletedList', 'Blockquote'],
-            ['Link', 'Unlink', 'Youtube'],
+            ['Link', 'Unlink', 'Youtube', 'Image','Iframe'],
             {'name': 'editing', 'items': ['Find']},
             ['RemoveFormat', 'Source'],
         ],
-        'extraPlugins': 'youtube',
-        'youtube_disabled_fields': ['txtWidth', 'txtHeight', 'chkAutoplay']
+        'extraPlugins': ['youtube', 'image2'],
+        'youtube_responsive': 'true',
+        'youtube_disabled_fields': ['txtWidth', 'txtHeight', 'chkAutoplay', 'txtEmbed', 'chkResponsive', 'chkNoEmbed',
+                                    'chkRelated', 'chkOlderCode', 'chkPrivacy', 'chkAutoplay', 'txtStartAt',
+                                    'chkControls'],
     }
 }

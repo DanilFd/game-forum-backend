@@ -4,6 +4,7 @@ from rest_framework import generics
 
 from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
+from news.pagination import NewsPagination
 from news.serializers import ListNewsItemSerializer, \
     DetailNewsItemSerializer, ListNewsCategoriesSerializer
 
@@ -13,6 +14,7 @@ class ListNewsItemView(generics.ListAPIView):
     queryset = NewsItem.objects.all()
     filter_backends = [DjangoFilterBackend]
     filterset_class = NewsFilterSet
+    pagination_class = NewsPagination
 
 
 class ListCategoryNewsView(generics.ListAPIView):

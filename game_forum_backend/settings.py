@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import django_heroku
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +26,7 @@ SECRET_KEY = 'django-insecure-tjx0z3k*or^r)km$cll_0ixpn5u@2ypz6)qc9*$93r53#$3j5z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -53,10 +55,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+}
 ROOT_URLCONF = 'game_forum_backend.urls'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'https://game-forum-frontend.herokuapp.com'
 ]
 
 TEMPLATES = [
@@ -124,9 +129,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [BASE_DIR, 'game_forum_backend/static']
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -134,7 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
+django_heroku.settings(locals())
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_CONFIGS = {
@@ -144,11 +148,11 @@ CKEDITOR_CONFIGS = {
             {'name': 'basicstyles',
              'items': ['Bold', 'Italic', 'Underline', 'Strike']},
             ['NumberedList', 'BulletedList', 'Blockquote'],
-            ['Link', 'Unlink', 'Youtube', 'Image','Iframe'],
+            ['Link', 'Unlink', 'Image', 'Iframe'],
             {'name': 'editing', 'items': ['Find']},
             ['RemoveFormat', 'Source'],
         ],
-        'extraPlugins': ['youtube', 'image2'],
+        'extraPlugins': ['image2'],
         'youtube_responsive': 'true',
         'youtube_disabled_fields': ['txtWidth', 'txtHeight', 'chkAutoplay', 'txtEmbed', 'chkResponsive', 'chkNoEmbed',
                                     'chkRelated', 'chkOlderCode', 'chkPrivacy', 'chkAutoplay', 'txtStartAt',

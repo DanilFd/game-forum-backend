@@ -38,6 +38,7 @@ class NewsItem(models.Model):
     class Meta:
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
+        ordering = ['-creation_date']
 
     title = models.CharField(verbose_name="Заголовок", max_length=130)
     image = models.ImageField(verbose_name="Изображение")

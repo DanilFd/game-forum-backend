@@ -4,10 +4,18 @@ from news.models import NewsItem, NewsCategory
 from news.replace_content import replace_content
 
 
+class NewsItemCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsCategory
+        fields = ["title", "slug"]
+
+
 class ListNewsItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
         fields = ["id", "title", "image", "creation_date", "categories"]
+
+    categories = NewsItemCategorySerializer(many=True)
 
 
 class DetailNewsItemSerializer(serializers.ModelSerializer):

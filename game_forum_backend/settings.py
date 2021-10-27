@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'ckeditor',
     'ckeditor_uploader',
-    'news'
+    'news',
+    'games'
 ]
 
 MIDDLEWARE = [

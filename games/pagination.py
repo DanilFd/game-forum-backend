@@ -1,6 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 
 
-class NewsPagination(PageNumberPagination):
+class GamesPagination(PageNumberPagination):
     page_size = 10
-    max_page_size = 30
+    max_page_size = 10

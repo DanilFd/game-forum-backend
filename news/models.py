@@ -31,7 +31,7 @@ class NewsCategory(models.Model):
                 })
 
     def __str__(self):
-        return self.title.upper()
+        return self.title
 
 
 class NewsItem(models.Model):

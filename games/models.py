@@ -23,7 +23,7 @@ class Genre(models.Model):
     title = models.CharField(verbose_name='Жанр', max_length=30, unique=True)
 
     def __str__(self):
-        return self.title
+        return self.title.lower()
 
 
 class Game(models.Model):
@@ -32,7 +32,7 @@ class Game(models.Model):
         verbose_name_plural = "Игры"
 
     img = models.ImageField(verbose_name="Изображение")
-    title = models.CharField(verbose_name="Название", max_length=50)
+    title = models.CharField(verbose_name="Название", max_length=50, unique=True)
     platform = models.ManyToManyField(Platform, verbose_name="Платформы")
     genre = models.ManyToManyField(Genre, verbose_name="Жанры")
     release_date = models.DateField(verbose_name="Дата выхода")

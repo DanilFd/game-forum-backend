@@ -6,8 +6,8 @@ from games.models import Game, Platform, Genre
 
 @admin.register(Game)
 class GamesAdmin(admin.ModelAdmin):
+    list_display = ['title', 'release_date', 'score']
     exclude = ['score']
-    list_display = ["title"]
     search_fields = ["title"]
 
 
@@ -19,4 +19,3 @@ class PlatformAdmin(admin.ModelAdmin):
 @admin.register(Genre)
 class PlatformAdmin(admin.ModelAdmin):
     list_display = ["title"]
-

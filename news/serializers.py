@@ -20,7 +20,7 @@ class ListNewsItemSerializer(serializers.ModelSerializer):
 
 class DetailNewsItemSerializer(serializers.ModelSerializer):
     content = serializers.SerializerMethodField()
-
+    
     def get_content(self, obj):
         return replace_content(obj.content)
 

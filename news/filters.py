@@ -9,3 +9,4 @@ class NewsFilterSet(FilterSet):
         model = NewsItem
         fields = ["categories"]
     category = CharFilter(field_name="categories__slug")
+

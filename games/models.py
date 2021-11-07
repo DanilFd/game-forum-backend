@@ -30,6 +30,7 @@ class Game(models.Model):
     class Meta:
         verbose_name = "Игра"
         verbose_name_plural = "Игры"
+        ordering = ['-id']
 
     img = models.ImageField(verbose_name="Изображение")
     title = models.CharField(verbose_name="Название", max_length=50, unique=True)

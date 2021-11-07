@@ -25,3 +25,9 @@ class ListCategoryNewsView(generics.ListAPIView):
 class DetailNewsItemView(generics.RetrieveAPIView):
     serializer_class = DetailNewsItemSerializer
     queryset = NewsItem.objects.all()
+
+    def get_object(self):
+        obj = super().get_object()
+        obj.views_count += 1
+        obj.save()
+        return obj

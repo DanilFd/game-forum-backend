@@ -4,13 +4,13 @@ from games.models import Game, Platform, Genre
 from games.utils.convert_month_to_str import convert_month_to_str
 
 
-class GamePlatformSerializer(serializers.ModelSerializer):
+class ListPlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
         fields = ['id', "title"]
 
 
-class GameGenreSerializer(serializers.ModelSerializer):
+class ListGenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = ['id', "title"]
@@ -19,10 +19,10 @@ class GameGenreSerializer(serializers.ModelSerializer):
 class ListGameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['id', 'title', 'platform', 'genre', 'release_date', 'score', 'img']
+        fields = ['id', 'title', 'platforms', 'genres', 'release_date', 'score', 'img']
 
-    platform = GamePlatformSerializer(many=True)
-    genre = GameGenreSerializer(many=True)
+    platforms = ListPlatformSerializer(many=True)
+    genres = ListGenreSerializer(many=True)
     release_date = serializers.SerializerMethodField()
 
     def get_release_date(self, obj: Game):

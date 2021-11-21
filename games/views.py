@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
+from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
 from games.filters import GamesFilterSet
@@ -14,9 +15,10 @@ from games.serializers import ListGameSerializer, ListGenreSerializer, ListPlatf
 class ListGameView(generics.ListAPIView):
     serializer_class = ListGameSerializer
     queryset = Game.objects.all()
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = GamesFilterSet
     pagination_class = GamesPagination
+    ordering_fields = ('release_date', 'score')
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, args, kwargs)

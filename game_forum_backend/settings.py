@@ -60,6 +60,7 @@ MIDDLEWARE = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DATETIME_FORMAT': '%d.%m.%Y'
 }
 ROOT_URLCONF = 'game_forum_backend.urls'
 CORS_ALLOWED_ORIGINS = [

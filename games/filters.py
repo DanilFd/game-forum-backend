@@ -1,4 +1,5 @@
 import django_filters
+from django.contrib.postgres.forms import RangeWidget
 from django_filters.rest_framework import FilterSet
 
 from games.models import Game, Genre, Platform
@@ -21,4 +22,11 @@ class GamesFilterSet(FilterSet):
         conjoined=True,
         queryset=Platform.objects.all()
     )
-
+    year_start = django_filters.NumberFilter(
+        field_name="release_date__year",
+        lookup_expr='gte'
+    )
+    year_end = django_filters.NumberFilter(
+        field_name="release_date__year",
+        lookup_expr='lte'
+    )

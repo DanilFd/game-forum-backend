@@ -22,8 +22,8 @@ class ListGameView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, args, kwargs)
-        response.data['min_data'] = Game.objects.earliest('release_date').release_date.year
-        response.data['max_data'] = Game.objects.latest('release_date').release_date.year
+        response.data['min_date'] = Game.objects.earliest('release_date').release_date.year
+        response.data['max_date'] = Game.objects.latest('release_date').release_date.year
         return response
 
 

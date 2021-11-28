@@ -44,8 +44,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'ckeditor',
     'ckeditor_uploader',
+    'rest_framework_simplejwt',
+    'users',
     'news',
-    'games'
+    'games',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +62,9 @@ MIDDLEWARE = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DATETIME_FORMAT': '%d.%m.%Y'
 }
 ROOT_URLCONF = 'game_forum_backend.urls'
@@ -87,7 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'game_forum_backend.wsgi.application'
-
+AUTH_USER_MODEL = "users.CustomUser"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

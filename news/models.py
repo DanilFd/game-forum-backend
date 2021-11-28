@@ -2,6 +2,7 @@ from django.db import models, IntegrityError
 
 # Create your models here.
 from django.utils.text import slugify
+from django_ckeditor_5.fields import CKEditor5Field
 from rest_framework.exceptions import ValidationError
 
 
@@ -42,11 +43,10 @@ class NewsItem(models.Model):
 
     title = models.CharField(verbose_name="Заголовок", max_length=130)
     image = models.ImageField(verbose_name="Изображение")
-    content = models.TextField(verbose_name="Контент")
+    content = CKEditor5Field(verbose_name="Контент", config_name='extends')
     views_count = models.IntegerField(verbose_name="Количество просмотров", default=0)
     creation_date = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     categories = models.ManyToManyField(NewsCategory, verbose_name="Категории")
 
     def __str__(self):
         return self.title
-

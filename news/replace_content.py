@@ -12,10 +12,13 @@ def replace_content(content):
             img['src'] = f'{HOSTNAME}{img["src"]}'
         img['width'] = '100%'
         img['height'] = ''
-    for iframe in soup.findAll('iframe'):
-        iframe['style'] = ''
-        iframe['height'] = '500px'
-        iframe['width'] = '100%'
-        if 'youtube' in iframe['src']:
-            iframe['src'] = f'{iframe["src"].replace("watch?v=", "embed/")}'
+    for figure in soup.findAll('figure'):
+        figure['style'] = ''
+        figure['width'] = '100%'
+    # for iframe in soup.findAll('iframe'):
+    #     iframe['style'] = ''
+    #     iframe['height'] = '500px'
+    #     iframe['width'] = '100%'
+    #     if 'youtube' in iframe['src']:
+    #         iframe['src'] = f'{iframe["src"].replace("watch?v=", "embed/")}'
     return soup.__str__()

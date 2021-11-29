@@ -178,23 +178,21 @@ customColorPalette = [
 
 CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
+        'toolbar': ['bold', 'italic', 'link',
                     'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
 
     },
     'extends': {
         'blockToolbar': [
-            'paragraph', 'heading1', 'heading2', 'heading3',
-            '|',
             'bulletedList', 'numberedList',
             '|',
             'blockQuote', 'imageUpload'
         ],
-        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                    'code', 'subscript', 'superscript', 'highlight', '|', 'codeBlock',
-                    'bulletedList', 'numberedList', 'todoList', '|', 'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable', ],
+        'toolbar': ['|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
+                    'code', 'subscript', 'superscript', '|',
+                    'bulletedList', 'numberedList', 'blockQuote', '|', 'imageUpload', 'mediaEmbed', '|',
+                    'fontColor', 'fontBackgroundColor', 'removeFormat',
+                    ],
         'mediaEmbed':
             {
                 'previewsInData': 'true'

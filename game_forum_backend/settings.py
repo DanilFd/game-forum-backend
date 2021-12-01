@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_ckeditor_5',
     'rest_framework_simplejwt',
+    'djoser',
     'users',
     'news',
     'games',
@@ -135,6 +136,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URl': 'password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'api/users/activate/{uid}/{token}/',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {}
+}
+
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -148,6 +157,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 django_heroku.settings(locals())
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = "sendlerdjango12@gmail.com"
+EMAIL_HOST_PASSWORD = 'b7XEXxhrS'
+EMAIl_PORT = 587
 
 customColorPalette = [
     {

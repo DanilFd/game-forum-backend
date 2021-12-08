@@ -31,7 +31,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -112,6 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTION': {
+            'min_length': 7
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -141,7 +143,10 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'api/users/activate/{uid}/{token}/',
     'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {}
+    'SERIALIZERS': {},
+    'EMAIL': {
+        'activation': 'users.email.ActivationEmail'
+    }
 }
 
 STATIC_URL = '/static/'

@@ -7,13 +7,13 @@ from games.utils.convert_month_to_str import convert_month_to_str
 class ListPlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
-        fields = ['id', "title"]
+        fields = ['id', "title", 'slug']
 
 
 class ListGenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = ['id', "title"]
+        fields = ['id', "title", 'slug']
 
 
 class ListGameSerializer(serializers.ModelSerializer):

@@ -1,4 +1,6 @@
-from django.db import models
+from django.db import models, IntegrityError
+from django.utils.text import slugify
+from rest_framework.exceptions import ValidationError
 
 
 class Platform(models.Model):
@@ -7,6 +9,24 @@ class Platform(models.Model):
         verbose_name_plural = "Платформы"
 
     title = models.CharField(verbose_name="Платформа", max_length=20, unique=True)
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        translated = self.title.translate(
+            str.maketrans(
+                "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+                "abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA"
+            ))
+        self.slug = slugify(translated)
+        try:
+            super(Platform, self).save(*args, **kwargs)
+
+        except IntegrityError as err:
+            print(err.message)
+            if 'UNIQUE constraint' in err.message:
+                raise ValidationError({
+                    'Платформа': 'Платформа уже существует.'
+                })
 
     def __str__(self):
         return self.title
@@ -18,6 +38,24 @@ class Genre(models.Model):
         verbose_name_plural = "Жанры"
 
     title = models.CharField(verbose_name='Жанр', max_length=20, unique=True)
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        translated = self.title.translate(
+            str.maketrans(
+                "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+                "abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA"
+            ))
+        self.slug = slugify(translated)
+        try:
+            super(Genre, self).save(*args, **kwargs)
+
+        except IntegrityError as err:
+            print(err.message)
+            if 'UNIQUE constraint' in err.message:
+                raise ValidationError({
+                    'Платформа': 'Платформа уже существует.'
+                })
 
     def __str__(self):
         return self.title.lower()

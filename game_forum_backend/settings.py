@@ -139,13 +139,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URl': 'password/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'api/users/activate/{uid}/{token}/',
     'SEND_ACTIVATION_EMAIL': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'SERIALIZERS': {},
     'EMAIL': {
-        'activation': 'users.email.ActivationEmail'
+        'activation': 'users.email.ActivationEmail',
+        'password_reset': 'users.email.PasswordResetEmail'
     }
 }
 
@@ -195,7 +198,7 @@ customColorPalette = [
         'label': 'Blue'
     },
 ]
-
+FRONTEND_URL = "localhost:3000"
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['bold', 'italic', 'link',

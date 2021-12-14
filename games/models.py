@@ -1,9 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
-
-
 class Platform(models.Model):
     class Meta:
         verbose_name = "Платформа"

@@ -1,5 +1,4 @@
 import django_filters
-from django.contrib.postgres.forms import RangeWidget
 from django_filters.rest_framework import FilterSet
 
 from games.models import Game, Genre, Platform
@@ -11,14 +10,14 @@ class GamesFilterSet(FilterSet):
         fields = []
 
     genre = django_filters.ModelMultipleChoiceFilter(
-        field_name="genres__title",
-        to_field_name='title',
+        field_name="genres__slug",
+        to_field_name='slug',
         conjoined=True,
         queryset=Genre.objects.all()
     )
     platform = django_filters.ModelMultipleChoiceFilter(
-        field_name="platforms__title",
-        to_field_name="title",
+        field_name="platforms__slug",
+        to_field_name="slug",
         conjoined=True,
         queryset=Platform.objects.all()
     )

@@ -14,10 +14,10 @@ class GamesAdmin(admin.ModelAdmin):
 @admin.register(Platform)
 class PlatformAdmin(admin.ModelAdmin):
     list_display = ["title"]
-    exclude = ["slug"]
+    exclude = ['slug']
 
 
 @admin.register(Genre)
 class PlatformAdmin(admin.ModelAdmin):
     list_display = ["title"]
-    exclude = ["slug"]
+    exclude = ['slug']

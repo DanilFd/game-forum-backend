@@ -49,8 +49,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'Пользователя'
         verbose_name_plural = 'Пользователи'
 
+    profile_img = models.ImageField(verbose_name="Изображение профиля", default="defaultProfileImg.png")
     login = models.CharField(verbose_name="Логин", max_length=20, unique=True, validators=[MinLengthValidator(6)])
-    email = models.EmailField(verbose_name="email", max_length=35, unique=True)
+    email = models.EmailField(verbose_name="Email", max_length=35, unique=True)
     last_login = models.DateTimeField(verbose_name="Последняя дата захода", auto_now=True)
     date_joined = models.DateTimeField(verbose_name="Дата регистрации", auto_now_add=True)
     role = models.CharField(verbose_name="Роль", choices=ROLE_CHOICES, max_length=15, default='User')

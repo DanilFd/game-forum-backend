@@ -29,12 +29,12 @@ class CustomUserChangeForm(UserChangeForm):
 
 class UserAdmin(BaseUserAdmin):
     ordering = ['login']
-    list_display = ['login', 'is_active', 'role']
+    list_display = ['login', 'is_active', 'role', 'profile_img']
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
     readonly_fields = ['last_login', 'date_joined']
     fieldsets = (
-        ('Персональные данные', {'fields': ('login', 'email', 'password', 'role')}),
+        ('Персональные данные', {'fields': ('login', 'email', 'password', 'role','profile_img')}),
         ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Важные даты', {'fields': ('last_login', 'date_joined')})
     )

@@ -5,6 +5,8 @@ from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 from rest_framework.exceptions import ValidationError
 
+from games.models import Game
+
 
 class NewsCategory(models.Model):
     class Meta:
@@ -47,6 +49,7 @@ class NewsItem(models.Model):
     views_count = models.IntegerField(verbose_name="Количество просмотров", default=0)
     creation_date = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     categories = models.ManyToManyField(NewsCategory, verbose_name="Категории")
+    game = models.ForeignKey(Game, verbose_name="Игра", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

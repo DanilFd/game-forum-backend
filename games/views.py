@@ -8,11 +8,11 @@ from rest_framework.filters import OrderingFilter
 from games.filters import GamesFilterSet
 from games.models import Game, Genre, Platform
 from games.pagination import GamesPagination
-from games.serializers import ListGameSerializer, ListGenreSerializer, ListPlatformSerializer
+from games.serializers import GameSerializer, ListGenreSerializer, ListPlatformSerializer
 
 
 class ListGameView(generics.ListAPIView):
-    serializer_class = ListGameSerializer
+    serializer_class = GameSerializer
     queryset = Game.objects.all()
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = GamesFilterSet

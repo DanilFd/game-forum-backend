@@ -16,7 +16,7 @@ class ListGenreSerializer(serializers.ModelSerializer):
         fields = ['id', "title", 'slug']
 
 
-class ListGameSerializer(serializers.ModelSerializer):
+class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ['id', 'title', 'platforms', 'genres', 'release_date', 'score', 'img']

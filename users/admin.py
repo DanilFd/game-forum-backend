@@ -35,7 +35,9 @@ class UserAdmin(BaseUserAdmin):
     readonly_fields = ['last_login', 'date_joined', 'last_visit']
     fieldsets = (
         ('Персональные данные',
-         {'fields': ('login', 'email', 'password', 'role', 'profile_img', 'gender', 'birthday_date', 'discord')}),
+         {'fields': (
+             'login', 'email', 'password', 'role', 'profile_img', 'gender', 'birthday_date', 'discord',
+             'about_custom_user')}),
         ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Важные даты', {'fields': ('last_visit', 'date_joined')})
     )

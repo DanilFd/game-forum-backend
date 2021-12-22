@@ -66,7 +66,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DATETIME_FORMAT': '%d.%m.%Y'
+    'DATETIME_FORMAT': '%d.%m.%Y',
+    'DATE_FORMAT': '%d.%m.%Y'
 }
 ROOT_URLCONF = 'game_forum_backend.urls'
 CORS_ALLOWED_ORIGINS = [

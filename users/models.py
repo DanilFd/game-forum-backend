@@ -43,6 +43,12 @@ ROLE_CHOICES = (
 
 )
 
+GENDER_CHOICES = (
+    ('Мужской', 'Мужской'),
+    ('Женский', 'Женский'),
+    ('Не указан', 'Не указан')
+)
+
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
@@ -52,9 +58,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     profile_img = models.ImageField(verbose_name="Изображение профиля", default="defaultProfileImg.png")
     login = models.CharField(verbose_name="Логин", max_length=20, unique=True, validators=[MinLengthValidator(6)])
     email = models.EmailField(verbose_name="Email", max_length=35, unique=True)
+    gender = models.CharField(verbose_name="Пол", choices=GENDER_CHOICES, max_length=15, default='Not specified')
+    birthday_date = models.DateField(verbose_name="Дата рождения", null=True, blank=True)
+    discord = models.CharField(verbose_name="Discord", max_length=30, null=True, blank=True)
+    role = models.CharField(verbose_name="Роль", choices=ROLE_CHOICES, max_length=15, default='User')
+    last_visit = models.DateTimeField('Последнее посещение', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="Последняя дата захода", auto_now=True)
     date_joined = models.DateTimeField(verbose_name="Дата регистрации", auto_now_add=True)
-    role = models.CharField(verbose_name="Роль", choices=ROLE_CHOICES, max_length=15, default='User')
     is_active = models.BooleanField(default=False, verbose_name="Active",
                                     help_text='Определяет, следует ли считать этого пользователя активным. '
                                               'Снимите этот флажок вместо удаления учетных записей.')

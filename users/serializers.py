@@ -19,4 +19,4 @@ class CustomTokeObtainPairSerializer(TokenObtainPairSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['profile_img', 'login']
+        fields = ['profile_img', 'login', 'date_joined', 'last_visit', 'birthday_date', 'discord','gender']

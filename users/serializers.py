@@ -23,7 +23,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['profile_img', 'login', 'date_joined', 'last_visit', 'birthday_date', 'discord', 'gender',
-                  'about_custom_user', 'age']
+                  'about_custom_user', 'age','email']
 
     age = SerializerMethodField()
 
@@ -31,3 +31,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
         if instance.birthday_date is None:
             return None
         return (date.today() - instance.birthday_date) // timedelta(days=365.2425)
+
+
+class UserProfileEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['birthday_date', 'gender', 'discord', 'about_custom_user']

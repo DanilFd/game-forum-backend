@@ -23,9 +23,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['profile_img', 'login', 'date_joined', 'last_visit', 'birthday_date', 'discord', 'gender',
-                  'about_custom_user', 'age','email']
+                  'about_custom_user', 'age', 'email']
 
     age = SerializerMethodField()
+    birthday_date = serializers.DateField(format='%d.%m.%Y')
 
     def get_age(self, instance: CustomUser):
         if instance.birthday_date is None:

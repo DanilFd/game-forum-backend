@@ -38,3 +38,9 @@ class UserProfileEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['birthday_date', 'gender', 'discord', 'about_custom_user']
+
+
+class ModestUserProfileSerializer(UserProfileSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['profile_img', 'login', 'date_joined', 'gender', 'age', ]

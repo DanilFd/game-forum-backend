@@ -4,6 +4,7 @@ from games.models import Game
 from games.serializers import GameSerializer
 from news.models import NewsItem, NewsCategory
 from news.replace_content import replace_content
+from users.serializers import UserProfileSerializer, ModestUserProfileSerializer
 
 
 class NewsItemCategorySerializer(serializers.ModelSerializer):
@@ -30,7 +31,9 @@ class DetailNewsItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "content", "views_count", "creation_date", "game"]
+        fields = ["id", "title", "content", "views_count", "creation_date", "game", "creator"]
+
+    creator = ModestUserProfileSerializer()
 
 
 class ListNewsCategoriesSerializer(serializers.ModelSerializer):

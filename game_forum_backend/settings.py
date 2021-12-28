@@ -104,7 +104,7 @@ DATABASES = {
     }
 }
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
 # Password validation
@@ -218,7 +218,7 @@ CKEDITOR_5_CONFIGS = {
             'blockQuote', 'imageUpload'
         ],
         'toolbar': ['|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                    'code', 'subscript', 'superscript', '|',
+                     'subscript', 'superscript', '|',
                     'bulletedList', 'numberedList', 'blockQuote', '|', 'imageUpload', 'mediaEmbed', '|',
                     'fontColor', 'fontBackgroundColor', 'removeFormat',
                     ],

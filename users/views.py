@@ -9,10 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.models import CustomUser
-from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer
+from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
+    CustomTokenRefreshSerializer
 from users.utils import get_web_url
 
 
@@ -40,6 +41,10 @@ class UserActivationView(APIView):
 
 class CustomTokeObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokeObtainPairSerializer
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    serializer_class = CustomTokenRefreshSerializer
 
 
 class UserProfileView(generics.RetrieveAPIView):

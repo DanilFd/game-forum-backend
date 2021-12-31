@@ -2,6 +2,8 @@ from django.db import models, IntegrityError
 from django.utils.text import slugify
 from rest_framework.exceptions import ValidationError
 
+from users.models import CustomUser
+
 
 class Platform(models.Model):
     class Meta:
@@ -76,3 +78,13 @@ class Game(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserGameRelation(models.Model):
+    class Meta:
+        verbose_name = "Избранная игра"
+        verbose_name_plural = "Избранные игры"
+
+    game = models.ForeignKey(Game, on_delete=models.CASCADE,  related_name="user_relations")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    is_following = models.BooleanField(default=False)

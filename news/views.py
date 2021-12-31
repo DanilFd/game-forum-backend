@@ -1,6 +1,7 @@
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
 from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
@@ -31,3 +32,13 @@ class DetailNewsItemView(generics.RetrieveAPIView):
         obj.views_count += 1
         obj.save()
         return obj
+
+
+class FavoritesNewsView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ListNewsItemSerializer
+    pagination_class = NewsPagination
+
+    def get_queryset(self):
+        return NewsItem.objects.filter(game__user_relations__is_following=True,
+                                       game__user_relations__user=self.request.user)

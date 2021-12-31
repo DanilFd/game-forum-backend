@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from games.models import Game, Platform, Genre
+from games.models import Game, Platform, Genre, UserGameRelation
 
 
 @admin.register(Game)
@@ -21,3 +21,8 @@ class PlatformAdmin(admin.ModelAdmin):
 class PlatformAdmin(admin.ModelAdmin):
     list_display = ["title"]
     exclude = ['slug']
+
+
+@admin.register(UserGameRelation)
+class UserGameRelationAdmin(admin.ModelAdmin):
+    list_display = ['game', 'user', 'is_following']

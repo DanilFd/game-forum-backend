@@ -4,11 +4,15 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 
 from games.filters import GamesFilterSet
-from games.models import Game, Genre, Platform
+from games.models import Game, Genre, Platform, UserGameRelation
 from games.pagination import GamesPagination
-from games.serializers import GameSerializer, ListGenreSerializer, ListPlatformSerializer
+from games.serializers import GameSerializer, ListGenreSerializer, ListPlatformSerializer, UserGameRelationSerializer
+from news.models import NewsItem
+from news.pagination import NewsPagination
+from news.serializers import ListNewsItemSerializer
 
 
 class ListGameView(generics.ListAPIView):
@@ -34,3 +38,14 @@ class ListGenreView(generics.ListAPIView):
 class ListPlatformView(generics.ListAPIView):
     serializer_class = ListPlatformSerializer
     queryset = Platform.objects.all()
+
+
+class FollowingOnGameView(generics.UpdateAPIView):
+    serializer_class = UserGameRelationSerializer
+    queryset = UserGameRelation.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        obj, _ = UserGameRelation.objects.get_or_create(user=self.request.user, game_id=self.kwargs['pk'])
+        return obj
+

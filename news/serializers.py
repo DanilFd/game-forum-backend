@@ -27,11 +27,11 @@ class DetailNewsItemSerializer(serializers.ModelSerializer):
     def get_content(self, obj):
         return replace_content(obj.content)
 
-    game = GameSerializer(read_only=True)
+    games = GameSerializer(read_only=True, many=True)
 
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "content", "views_count", "creation_date", "game", "creator"]
+        fields = ["id", "title", "content", "views_count", "creation_date", "games", "creator"]
 
     creator = ModestUserProfileSerializer()
 

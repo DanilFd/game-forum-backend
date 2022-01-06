@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from games.models import Game
-from games.serializers import GameSerializer
+from games.serializers import GameSerializer, ModestGameSerializer
 from news.models import NewsItem, NewsCategory
 from news.replace_content import replace_content
 from users.serializers import UserProfileSerializer, ModestUserProfileSerializer
@@ -40,3 +40,11 @@ class ListNewsCategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsCategory
         fields = ["title", "slug", "id"]
+
+
+class FavoritesNewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = ["id", "title", "image", "creation_date", "categories", "games"]
+
+    games = ModestGameSerializer(many=True)

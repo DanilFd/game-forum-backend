@@ -44,3 +44,9 @@ class UserGameRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGameRelation
         fields = ['is_following']
+
+
+class ModestGameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = ["id", "title"]

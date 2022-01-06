@@ -3,11 +3,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from games.serializers import GameSerializer
 from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
 from news.pagination import NewsPagination
 from news.serializers import ListNewsItemSerializer, \
-    DetailNewsItemSerializer, ListNewsCategoriesSerializer
+    DetailNewsItemSerializer, ListNewsCategoriesSerializer, FavoritesNewsSerializer
 
 
 class ListNewsItemView(generics.ListAPIView):
@@ -36,9 +37,9 @@ class DetailNewsItemView(generics.RetrieveAPIView):
 
 class FavoritesNewsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ListNewsItemSerializer
+    serializer_class = FavoritesNewsSerializer
     pagination_class = NewsPagination
 
     def get_queryset(self):
-        return NewsItem.objects.filter(game__user_relations__is_following=True,
-                                       game__user_relations__user=self.request.user)
+        return NewsItem.objects.filter(games__user_relations__is_following=True,
+                                       games__user_relations__user=self.request.user).distinct()

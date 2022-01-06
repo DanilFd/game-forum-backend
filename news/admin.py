@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 
+from games.models import UserGameRelation
 from news.models import NewsItem, NewsCategory
 
 
@@ -28,3 +29,5 @@ class NewsAdmin(admin.ModelAdmin):
 class CategoryNewsAdmin(admin.ModelAdmin):
     list_display = ["title"]
     exclude = ["slug"]
+
+

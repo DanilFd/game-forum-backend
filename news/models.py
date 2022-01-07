@@ -50,7 +50,7 @@ class NewsItem(models.Model):
     views_count = models.IntegerField(verbose_name="Количество просмотров", default=0)
     creation_date = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     categories = models.ManyToManyField(NewsCategory, verbose_name="Категории")
-    games = models.ManyToManyField(Game, verbose_name="Игра", null=True, blank=True)
+    games = models.ManyToManyField(Game, verbose_name="Игра", blank=True)
     creator = models.ForeignKey(CustomUser, verbose_name="Создатель", on_delete=models.CASCADE, blank=True)
 
     def __str__(self):

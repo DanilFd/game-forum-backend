@@ -10,7 +10,7 @@ class Dialog(models.Model):
         verbose_name_plural = "Диалоги"
         ordering = ['-id']
 
-    title = models.CharField(verbose_name="Заголовок диалога", max_length=25)
+    title = models.CharField(verbose_name="Заголовок диалога", max_length=50)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="created_dialogs")
     responder = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="responding_dialogs")
     creation_date = models.DateTimeField(auto_now_add=True)

@@ -4,7 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 # Create your views here.
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.models import CustomUser
 from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
-    CustomTokenRefreshSerializer
+    CustomTokenRefreshSerializer, ModestUserSerializer
 from users.utils import get_web_url
 
 
@@ -59,3 +59,11 @@ class UserProfileEditView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class UserListView(generics.ListAPIView):
+    serializer_class = ModestUserSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['login']

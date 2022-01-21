@@ -25,7 +25,6 @@ class SendMessageView(generics.CreateAPIView):
     serializer_class = SendMessageSerializer
 
 
-
 class DialogDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = DialogDetailSerializer
@@ -54,3 +53,5 @@ class DeleteDialogView(generics.DestroyAPIView):
             instance.save()
         elif instance.user_that_deleted != self.request.user:
             instance.delete()
+
+

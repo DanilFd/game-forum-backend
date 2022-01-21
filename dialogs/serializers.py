@@ -64,14 +64,20 @@ class LastMessageSerializer(serializers.ModelSerializer):
 class DialogsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dialog
-        fields = ['id', 'title', 'responder', 'creation_date', 'last_message', 'messages_count']
+        fields = ['id', 'title', 'interlocutor', 'creation_date', 'last_message', 'messages_count']
 
     last_message = serializers.SerializerMethodField()
-    responder = ModestUserProfileSerializer()
+    interlocutor = serializers.SerializerMethodField()
     messages_count = serializers.SerializerMethodField()
+    creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M")
 
     def get_last_message(self, obj: Dialog):
         return LastMessageSerializer(obj.messages.last(), context=self.context).data
 
     def get_messages_count(self, obj: Dialog):
         return obj.messages.count()
+
+    def get_interlocutor(self, obj: Dialog):
+        if self.context['request'].user == obj.responder:
+            return ModestUserProfileSerializer(obj.owner, context=self.context).data
+        return ModestUserProfileSerializer(obj.responder, context=self.context).data

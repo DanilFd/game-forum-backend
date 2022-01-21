@@ -72,4 +72,10 @@ class UserProfileEditSerializer(serializers.ModelSerializer):
 class ModestUserProfileSerializer(UserProfileSerializer):
     class Meta:
         model = CustomUser
-        fields = ['profile_img', 'login', 'date_joined', 'gender', 'age', ]
+        fields = ['profile_img', 'login', 'date_joined', 'gender', 'age']
+
+
+class ModestUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['profile_img', 'login']

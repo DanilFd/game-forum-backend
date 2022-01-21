@@ -7,5 +7,5 @@ urlpatterns = [
     path('send/', SendMessageView.as_view()),
     path('<int:pk>/', DialogDetailView.as_view()),
     path('get/', DialogsListView.as_view()),
-    path('delete/<int:pk>/', DeleteDialogView.as_view())
+    path('delete/<int:pk>/', DeleteDialogView.as_view()),
 ]

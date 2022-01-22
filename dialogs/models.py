@@ -33,3 +33,11 @@ class DialogMessage(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class UnreadMessage(models.Model):
+    class Meta:
+        pass
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    message = models.ForeignKey(DialogMessage, on_delete=models.CASCADE, related_name="unread_messages")

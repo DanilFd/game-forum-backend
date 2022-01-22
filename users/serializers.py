@@ -78,4 +78,4 @@ class ModestUserProfileSerializer(UserProfileSerializer):
 class ModestUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['profile_img', 'login']
+        fields = ['id', 'profile_img', 'login']

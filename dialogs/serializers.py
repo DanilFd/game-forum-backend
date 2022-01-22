@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import NotAcceptable, NotFound
 
-from dialogs.models import Dialog, DialogMessage
+from dialogs.models import Dialog, DialogMessage, UnreadMessage
 from users.models import CustomUser
 from users.serializers import ModestUserProfileSerializer
 
@@ -23,7 +23,10 @@ class CreateDialogSerializer(serializers.ModelSerializer):
             raise NotAcceptable(detail="Вы не можете написать самому себе.")
         dialog = Dialog.objects.create(title=validated_data["title"], owner=owner,
                                        responder=responder)
-        DialogMessage.objects.create(sender=owner, dialog=dialog, content=validated_data["content"])
+
+        message = DialogMessage.objects.create(sender=owner, dialog=dialog, content=validated_data["content"])
+        UnreadMessage.objects.create(
+            user=dialog.responder if owner == dialog.owner else dialog.owner, message=message)
         return dialog
 
 
@@ -33,13 +36,20 @@ class SendMessageSerializer(serializers.ModelSerializer):
         fields = ['dialog', 'content', 'sender', 'sending_date']
         read_only_fields = ['sender', 'sending_date']
 
-    sending_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M")
-    sender = ModestUserProfileSerializer()
+    sending_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
+    sender = ModestUserProfileSerializer(read_only=True)
 
-    def save(self, **kwargs):
-        if not kwargs['dialog'].user_that_deleted is None:
+    def create(self, validated_data):
+        print("kwargs:", validated_data)
+        if not validated_data['dialog'].user_that_deleted is None:
             raise NotAcceptable(detail="Диалог удален")
-        super().save(**kwargs, sender=self.context['request'].user)
+        user = self.context['request'].user
+        validated_data['sender'] = user
+        message = super().create(validated_data)
+        UnreadMessage.objects.create(
+            user=validated_data['dialog'].responder if user == validated_data['dialog'].owner else validated_data[
+                'dialog'].owner, message=message)
+        return message
 
 
 class DialogDetailSerializer(serializers.ModelSerializer):

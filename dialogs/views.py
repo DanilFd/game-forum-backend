@@ -44,7 +44,7 @@ class DialogsListView(generics.ListAPIView):
     serializer_class = DialogsListSerializer
 
     def get_queryset(self):
-        return get_my_dialogs(self.request.user)
+        return get_my_dialogs(self.request.user).exclude(user_that_deleted=self.request.user)
 
 
 class DeleteDialogView(generics.DestroyAPIView):

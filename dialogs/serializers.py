@@ -33,11 +33,15 @@ class CreateDialogSerializer(serializers.ModelSerializer):
 class SendMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = DialogMessage
-        fields = ['dialog', 'content', 'sender', 'sending_date']
+        fields = ['id', 'dialog', 'content', 'sender', 'sending_date', 'is_first']
         read_only_fields = ['sender', 'sending_date']
 
     sending_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
     sender = ModestUserProfileSerializer(read_only=True)
+    is_first = serializers.SerializerMethodField()
+
+    def get_is_first(self, obj: DialogMessage):
+        return obj.id == obj.dialog.messages.earliest('sending_date').id
 
     def create(self, validated_data):
         print("kwargs:", validated_data)

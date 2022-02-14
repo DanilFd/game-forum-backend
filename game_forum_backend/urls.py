@@ -24,5 +24,6 @@ urlpatterns = [
                   path('api/news/', include('news.urls')),
                   path('api/games/', include('games.urls')),
                   path('api/users/', include('users.urls')),
-                  path('api/dialogs/', include('dialogs.urls'))
+                  path('api/dialogs/', include('dialogs.urls')),
+                  path('api/comments/', include('comments.urls'))
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

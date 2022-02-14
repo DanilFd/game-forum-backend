@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'users',
     'news',
     'games',
-    'dialogs'
+    'dialogs',
+    'comments'
 ]
 
 MIDDLEWARE = [
@@ -219,7 +220,7 @@ CKEDITOR_5_CONFIGS = {
             'blockQuote', 'imageUpload'
         ],
         'toolbar': ['|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                     'subscript', 'superscript', '|',
+                    'subscript', 'superscript', '|',
                     'bulletedList', 'numberedList', 'blockQuote', '|', 'imageUpload', 'mediaEmbed', '|',
                     'fontColor', 'fontBackgroundColor', 'removeFormat',
                     ],

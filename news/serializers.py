@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from comments.models import NewsComment
 from games.models import Game
 from games.serializers import GameSerializer, ModestGameSerializer
 from news.models import NewsItem, NewsCategory
@@ -16,9 +17,13 @@ class NewsItemCategorySerializer(serializers.ModelSerializer):
 class ListNewsItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "image", "creation_date", "categories"]
+        fields = ["id", "title", "image", "creation_date", "categories", "comments_count"]
 
     categories = NewsItemCategorySerializer(many=True)
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: NewsItem):
+        return NewsComment.objects.filter(news_item_id=obj.id).count()
 
 
 class DetailNewsItemSerializer(serializers.ModelSerializer):

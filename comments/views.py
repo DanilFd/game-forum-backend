@@ -35,3 +35,6 @@ class CreateComplaintView(generics.CreateAPIView):
 
 class DeleteNewsCommentView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return NewsComment.objects.filter(creator=self.request.user)

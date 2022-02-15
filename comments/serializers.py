@@ -11,13 +11,17 @@ from users.serializers import ModestUserProfileSerializer
 class CreateCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsComment
-        fields = ['id', 'creator', 'creation_date', 'content', 'parent', 'children', "news_item"]
+        fields = ['id', 'creator', 'creation_date', 'content', 'parent', 'children', "news_item", 'is_owner']
         extra_kwargs = {
             'news_item': {'write_only': True}
         }
 
+    is_owner = serializers.SerializerMethodField()
     creator = ModestUserProfileSerializer(read_only=True)
     children = RecursiveField(many=True, read_only=True)
+
+    def get_is_owner(self, obj):
+        return self.context['request'].user.id == obj.creator.id
 
     def create(self, validated_data):
         validated_data['creator'] = self.context['request'].user
@@ -27,11 +31,15 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class ListNewsCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsComment
-        fields = ['id', 'creator', 'creation_date', 'content', 'children']
+        fields = ['id', 'creator', 'creation_date', 'content', 'children', 'is_owner']
 
+    is_owner = serializers.SerializerMethodField()
     children = RecursiveField(many=True)
     creator = ModestUserProfileSerializer(read_only=True)
     creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
+
+    def get_is_owner(self, obj: NewsComment):
+        return self.context['request'].user.id == obj.creator.id
 
 
 class CreateComplaintSerializer(serializers.ModelSerializer):

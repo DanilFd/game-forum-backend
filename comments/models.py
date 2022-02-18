@@ -22,6 +22,7 @@ class NewsComment(models.Model):
     creation_date = models.DateTimeField(verbose_name="Дата публикации", auto_now_add=True)
     content = models.TextField(verbose_name="Контент")
     parent = models.ForeignKey('NewsComment', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
+    is_deleted = models.BooleanField(verbose_name="Удален ли", default=False)
 
     def __str__(self):
         return self.content

@@ -31,7 +31,7 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class ListNewsCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsComment
-        fields = ['id', 'creator', 'creation_date', 'content', 'children', 'is_owner']
+        fields = ['id', 'creator', 'creation_date', 'content', 'children', 'is_owner','is_deleted']
 
     is_owner = serializers.SerializerMethodField()
     children = RecursiveField(many=True)

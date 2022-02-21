@@ -40,5 +40,7 @@ class DeleteNewsCommentView(generics.DestroyAPIView):
         return NewsComment.objects.filter(creator=self.request.user)
 
     def perform_destroy(self, instance: NewsComment):
+        if not instance.children.count():
+            return instance.delete()
         instance.is_deleted = True
         instance.save()

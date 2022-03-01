@@ -6,7 +6,7 @@ from comments.models import NewsCommentComplaint, NewsComment
 
 @admin.register(NewsCommentComplaint)
 class NewsCommentComplaintAdmin(admin.ModelAdmin):
-    readonly_fields = ['comment', 'reason', 'time_add']
+    readonly_fields = ['comment', 'reason', 'time_add', 'description']
 
 
 @admin.register(NewsComment)

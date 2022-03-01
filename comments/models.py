@@ -36,7 +36,7 @@ class NewsCommentComplaint(models.Model):
     comment = models.ForeignKey(NewsComment, on_delete=models.CASCADE, verbose_name="Комментарий")
     reason = models.CharField(max_length=20, choices=REASON_CHOICES, verbose_name="Причина")
     time_add = models.DateTimeField(auto_now_add=True, verbose_name="Время отправки жалобы.")
+    description = models.TextField(max_length=70, verbose_name="Описание жалобы", null=True, blank=True)
 
     def __str__(self):
         return self.comment.content
-

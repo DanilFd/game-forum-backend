@@ -31,7 +31,7 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class ListNewsCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsComment
-        fields = ['id', 'creator', 'creation_date', 'content', 'children', 'is_owner','is_deleted','parent']
+        fields = ['id', 'creator', 'creation_date', 'content', 'children', 'is_owner', 'is_deleted', 'parent']
 
     is_owner = serializers.SerializerMethodField()
     children = RecursiveField(many=True)
@@ -45,6 +45,6 @@ class ListNewsCommentSerializer(serializers.ModelSerializer):
 class CreateComplaintSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsCommentComplaint
-        fields = ['comment', 'reason', 'time_add']
+        fields = ['comment', 'reason', 'time_add', 'description']
 
     time_add = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)

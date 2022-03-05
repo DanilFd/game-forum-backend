@@ -5,6 +5,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from comments.models import NewsComment
+from comments.paginate_comments import paginate_comments
 from comments.pagination import NewsCommentPagination
 from comments.serializers import CreateCommentSerializer, ListNewsCommentSerializer, CreateComplaintSerializer
 from news.models import NewsItem
@@ -16,13 +17,14 @@ class CreateCommentView(generics.CreateAPIView):
 
 
 class ListNewsCommentView(generics.ListAPIView):
-    serializer_class = ListNewsCommentSerializer
-    pagination_class = NewsCommentPagination
-
-    def get(self, request, *args, **kwargs):
-        res = self.list(request, *args, **kwargs)
-        res.data['comments_count'] = NewsItem.objects.get(id=self.kwargs['pk']).comments.count()
-        return res
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        paginated_comments = paginate_comments(
+            queryset,
+            int(self.request.query_params.get('page', 1)),
+            self.get_serializer_context()
+        )
+        return Response(paginated_comments)
 
     def get_queryset(self):
         return NewsComment.objects.filter(parent=None, news_item_id=self.kwargs['pk'])

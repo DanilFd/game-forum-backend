@@ -11,9 +11,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from users.models import CustomUser
+from users.models import CustomUser, UserUserRelation
 from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
-    CustomTokenRefreshSerializer, ModestUserSerializer
+    CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer
 from users.utils import get_web_url
 
 
@@ -67,3 +67,13 @@ class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['login']
+
+
+class RateUserView(generics.UpdateAPIView):
+    serializer_class = RateUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        obj, _ = UserUserRelation.objects.get_or_create(user2=self.request.user,
+                                                        user1=CustomUser.objects.get(login=self.kwargs['username']))
+        return obj

@@ -7,7 +7,7 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.state import token_backend
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.models import CustomUser
+from users.models import CustomUser, UserUserRelation
 from users.utils import get_web_url
 
 
@@ -79,3 +79,37 @@ class ModestUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'profile_img', 'login']
+
+
+class RateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserUserRelation
+        fields = ['rate']
+
+    def update(self, instance: UserUserRelation, validated_data):
+        initial_rate = instance.rate
+        instance.rate = validated_data['rate']
+        instance.save()
+        if initial_rate == 'Like':
+            if instance.rate == 'Dislike':
+                instance.user1.rating -= 2
+                instance.user1.save()
+            elif instance.rate is None:
+                instance.user1.rating -= 1
+                instance.user1.save()
+        elif initial_rate == 'Dislike':
+            if instance.rate == 'Like':
+                instance.user1.rating += 2
+                instance.user1.save()
+            elif instance.rate is None:
+                instance.user1.rating += 1
+                instance.user1.save()
+        elif initial_rate is None:
+            if instance.rate == 'Like':
+                instance.user1.rating += 1
+                instance.user1.save()
+            elif instance.rate == 'Dislike':
+                instance.user1.rating -= 1
+                instance.user1.save()
+
+        return instance

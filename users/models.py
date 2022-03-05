@@ -74,6 +74,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False, verbose_name="Superuser status",
                                        help_text='Указывает, что у этого пользователя есть все '
                                                  'разрешения без их явного назначения.')
+    rating = models.DecimalField(default=0, decimal_places=2, max_digits=6)
 
     USERNAME_FIELD = 'login'
 
@@ -83,3 +84,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.login
+
+
+RATE_CHOICES = (
+    ('Like', 'Like'),
+    ('Dislike', 'Dislike'),
+)
+
+
+class UserUserRelation(models.Model):
+    class Meta:
+        pass
+
+    user1 = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="liked_me")
+    user2 = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="my_likes")
+    rate = models.TextField(choices=RATE_CHOICES, default=None, blank=True, null=True)

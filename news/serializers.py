@@ -36,7 +36,12 @@ class DetailNewsItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "content", "views_count", "creation_date", "games", "creator"]
+        fields = ["id", "title", "content", "views_count", "creation_date", "games", "creator", "comments_count"]
+
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: NewsItem):
+        return NewsComment.objects.filter(news_item_id=obj.id).count()
 
     creator = ModestUserProfileSerializer()
 

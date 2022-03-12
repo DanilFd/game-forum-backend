@@ -88,7 +88,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 RATE_CHOICES = (
     ('Like', 'Like'),
-    ('Dislike', 'Dislike'),
+    ('Dislike', 'Dislike')
 )
 
 

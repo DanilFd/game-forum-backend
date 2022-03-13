@@ -14,7 +14,7 @@ def get_permitted_messages_count(rating: float):
 
 
 class MessageCountPermission(BasePermission):
-    message = f"Ваш лимит на создани диалогов исчерпан."
+    message = f"Ваш лимит на создание диалогов исчерпан."
 
     def has_permission(self, request, view):
         messages_count = UserAction.objects.filter(user=request.user, moment__gt=datetime.date.today(),

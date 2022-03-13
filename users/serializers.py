@@ -7,6 +7,7 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.state import token_backend
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from comments.models import NewsComment
 from users.models import CustomUser, UserUserRelation
 from users.utils import get_web_url
 
@@ -79,7 +80,12 @@ class UserProfileEditSerializer(serializers.ModelSerializer):
 class ModestUserProfileSerializer(UserProfileSerializer):
     class Meta:
         model = CustomUser
-        fields = ['profile_img', 'login', 'date_joined', 'gender', 'age']
+        fields = ['profile_img', 'login', 'date_joined', 'gender', 'age', 'rating', 'comments_count']
+
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: CustomUser):
+        return NewsComment.objects.filter(creator=obj).count()
 
 
 class ModestUserSerializer(serializers.ModelSerializer):
@@ -91,7 +97,13 @@ class ModestUserSerializer(serializers.ModelSerializer):
 class RateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserUserRelation
-        fields = ['rate']
+        fields = ['rate', 'rating']
+        read_only_fields = ['rating']
+
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, obj: UserUserRelation):
+        return obj.user1.rating
 
     def update(self, instance: UserUserRelation, validated_data):
         initial_rate = instance.rate
@@ -119,6 +131,3 @@ class RateUserSerializer(serializers.ModelSerializer):
                 instance.user1.rating -= 1
                 instance.user1.save()
         return instance
-
-
-

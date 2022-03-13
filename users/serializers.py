@@ -118,5 +118,7 @@ class RateUserSerializer(serializers.ModelSerializer):
             elif instance.rate == 'Dislike':
                 instance.user1.rating -= 1
                 instance.user1.save()
-
         return instance
+
+
+

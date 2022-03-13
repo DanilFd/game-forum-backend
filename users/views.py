@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 from django.contrib.sites.shortcuts import get_current_site
 
@@ -11,7 +13,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from users.models import CustomUser, UserUserRelation
+from users.models import CustomUser, UserUserRelation, UserAction
+from users.permissions import get_permitted_messages_count
 from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
     CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer
 from users.utils import get_web_url
@@ -77,3 +80,16 @@ class RateUserView(generics.UpdateAPIView):
         obj, _ = UserUserRelation.objects.get_or_create(user2=self.request.user,
                                                         user1=CustomUser.objects.get(login=self.kwargs['username']))
         return obj
+
+
+class GetUserActionsView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        # actions = UserAction.objects.filter(user=self.request.user, moment__gt=datetime.date.today())
+        data = dict(
+            # send_message=actions.filter(action_type='send_message').count(),
+            # rate_user=actions.filter(action_type='rate_user').count(),
+            available_messages=get_permitted_messages_count(request.user.rating)
+        )
+        return Response(data)

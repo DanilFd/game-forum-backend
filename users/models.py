@@ -99,3 +99,18 @@ class UserUserRelation(models.Model):
     user1 = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="liked_me")
     user2 = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="my_likes")
     rate = models.TextField(choices=RATE_CHOICES, default=None, blank=True, null=True)
+
+
+ACTION_CHOICES = (
+    ("send_message", "send_message"),
+    ("rate_user", "rate_user"),
+)
+
+
+class UserAction(models.Model):
+    class Meta:
+        pass
+
+    action_type = models.TextField(choices=ACTION_CHOICES)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    moment = models.DateTimeField(auto_now_add=True)

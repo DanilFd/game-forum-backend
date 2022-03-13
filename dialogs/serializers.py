@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import NotAcceptable, NotFound
 
 from dialogs.models import Dialog, DialogMessage, UnreadMessage
-from users.models import CustomUser
+from users.models import CustomUser, UserAction
 from users.serializers import ModestUserProfileSerializer
 
 
@@ -27,6 +27,7 @@ class CreateDialogSerializer(serializers.ModelSerializer):
         message = DialogMessage.objects.create(sender=owner, dialog=dialog, content=validated_data["content"])
         UnreadMessage.objects.create(
             user=dialog.responder if owner == dialog.owner else dialog.owner, message=message)
+        UserAction.objects.create(action_type="send_message", user=owner)
         return dialog
 
 

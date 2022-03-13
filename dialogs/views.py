@@ -8,6 +8,7 @@ from dialogs.models import Dialog, UnreadMessage
 from dialogs.serializers import CreateDialogSerializer, SendMessageSerializer, DialogDetailSerializer, \
     DialogsListSerializer
 from users.models import CustomUser
+from users.permissions import MessageCountPermission
 
 
 def get_my_dialogs(me: CustomUser):
@@ -15,7 +16,7 @@ def get_my_dialogs(me: CustomUser):
 
 
 class CreateDialogView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, MessageCountPermission]
     serializer_class = CreateDialogSerializer
 
 

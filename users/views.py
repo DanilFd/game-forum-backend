@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.models import CustomUser, UserUserRelation, UserAction
-from users.permissions import get_permitted_messages_count, RateCountPermission, get_permitted_rate_count
+from users.permissions import get_permitted_messages_count, RateCountPermission, get_permitted_rate_count, CantLikeSelf
 from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
     CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer
 from users.utils import get_web_url
@@ -74,7 +74,7 @@ class UserListView(generics.ListAPIView):
 
 class RateUserView(generics.UpdateAPIView):
     serializer_class = RateUserSerializer
-    permission_classes = [IsAuthenticated, RateCountPermission]
+    permission_classes = {IsAuthenticated, RateCountPermission, CantLikeSelf}
 
     def get_object(self):
         obj, _ = UserUserRelation.objects.get_or_create(user2=self.request.user,

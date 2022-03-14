@@ -1,4 +1,3 @@
-import decimal
 from rest_framework import serializers
 from comments.models import NewsComment, NewsCommentComplaint, UserCommentRelation
 from comments.serializer_fields import RecursiveField
@@ -30,15 +29,22 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class ListNewsCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsComment
-        fields = ['id', 'creator', 'creation_date', 'content', 'is_owner', 'is_deleted', 'parent', 'rating']
+        fields = ['id', 'creator', 'creation_date', 'content', 'is_owner', 'is_deleted', 'parent', 'rating', 'rate']
 
     is_owner = serializers.SerializerMethodField()
     children = RecursiveField(many=True)
     creator = ModestUserProfileSerializer(read_only=True)
     creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
+    rate = serializers.SerializerMethodField()
 
     def get_is_owner(self, obj: NewsComment):
         return self.context['request'].user.id == obj.creator.id
+
+    def get_rate(self, obj: NewsComment):
+        found_rate = UserCommentRelation.objects.filter(user=self.context['request'].user, comment=obj).first()
+        if found_rate is None:
+            return None
+        return found_rate.rate
 
 
 class CreateComplaintSerializer(serializers.ModelSerializer):

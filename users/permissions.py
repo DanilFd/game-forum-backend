@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 import datetime
 
-from users.models import UserAction
+from users.models import UserAction, UserUserRelation
 
 
 def get_permitted_messages_count(rating):
@@ -32,15 +32,23 @@ def get_permitted_rate_count(rating):
         return 20
     if rating > 0:
         return 10
-    if rating < 0:
+    if rating <= 0:
         return 5
 
 
 class RateCountPermission(BasePermission):
-    message = f"Вы превыслили ваш лимит голосований за сутки."
+    message = "Вы превыслили ваш лимит голосований за сутки."
 
     def has_permission(self, request, view):
         rate_count = UserAction.objects.filter(user=request.user, moment__gt=datetime.date.today(),
                                                action_type='rate_user').count()
 
         return rate_count != get_permitted_rate_count(request.user.rating)
+
+
+class CantLikeSelf(BasePermission):
+    message = "Вы не можете оценить себя."
+
+    def has_permission(self, request, view):
+
+        return request.user.login != view.kwargs['username']

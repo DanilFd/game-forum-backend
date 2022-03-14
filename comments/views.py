@@ -4,10 +4,11 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from comments.models import NewsComment
+from comments.models import NewsComment, UserCommentRelation
 from comments.paginate_comments import paginate_comments
 from comments.pagination import NewsCommentPagination
-from comments.serializers import CreateCommentSerializer, ListNewsCommentSerializer, CreateComplaintSerializer
+from comments.serializers import CreateCommentSerializer, ListNewsCommentSerializer, CreateComplaintSerializer, \
+    RateCommentSerializer
 from news.models import NewsItem
 
 
@@ -46,3 +47,13 @@ class DeleteNewsCommentView(generics.DestroyAPIView):
             return instance.delete()
         instance.is_deleted = True
         instance.save()
+
+
+class RateCommentView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = RateCommentSerializer
+
+    def get_object(self):
+        obj, _ = UserCommentRelation.objects.get_or_create(user=self.request.user,
+                                                           comment=NewsComment.objects.get(id=self.kwargs['pk']))
+        return obj

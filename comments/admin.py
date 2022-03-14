@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from django.utils.html import format_html
 
-from comments.models import NewsCommentComplaint, NewsComment
+from comments.models import NewsCommentComplaint, NewsComment, UserCommentRelation
 from django.conf import settings
 
 

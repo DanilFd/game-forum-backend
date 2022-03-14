@@ -23,6 +23,7 @@ class NewsComment(models.Model):
     content = models.TextField(verbose_name="Контент")
     parent = models.ForeignKey('NewsComment', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
     is_deleted = models.BooleanField(verbose_name="Удален ли", default=False)
+    rating = models.IntegerField(default=0)
 
     def __str__(self):
         return self.content
@@ -40,3 +41,18 @@ class NewsCommentComplaint(models.Model):
 
     def __str__(self):
         return self.comment.content
+
+
+RATE_CHOICES = (
+    ('Like', 'Like'),
+    ('Dislike', 'Dislike')
+)
+
+
+class UserCommentRelation(models.Model):
+    class Meta:
+        pass
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    comment = models.ForeignKey(NewsComment, on_delete=models.CASCADE)
+    rate = models.TextField(choices=RATE_CHOICES, default=None, blank=True, null=True)

@@ -1,11 +1,9 @@
+import decimal
 from rest_framework import serializers
-from rest_framework.exceptions import NotAcceptable, NotFound
-
-from comments.models import NewsComment, NewsCommentComplaint
+from comments.models import NewsComment, NewsCommentComplaint, UserCommentRelation
 from comments.serializer_fields import RecursiveField
-from dialogs.models import Dialog, DialogMessage, UnreadMessage
-from users.models import CustomUser
 from users.serializers import ModestUserProfileSerializer
+from decimal import Decimal
 
 
 class CreateCommentSerializer(serializers.ModelSerializer):
@@ -31,7 +29,7 @@ class CreateCommentSerializer(serializers.ModelSerializer):
 class ListNewsCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsComment
-        fields = ['id', 'creator', 'creation_date', 'content', 'is_owner', 'is_deleted', 'parent']
+        fields = ['id', 'creator', 'creation_date', 'content', 'is_owner', 'is_deleted', 'parent', 'rating']
 
     is_owner = serializers.SerializerMethodField()
     children = RecursiveField(many=True)
@@ -48,3 +46,50 @@ class CreateComplaintSerializer(serializers.ModelSerializer):
         fields = ['comment', 'reason', 'time_add', 'description']
 
     time_add = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
+
+
+class RateCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserCommentRelation
+        fields = ['rate', 'rating']
+        read_only_fields = ['rating']
+
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, obj: UserCommentRelation):
+        return obj.comment.rating
+
+    def update(self, instance: UserCommentRelation, validated_data):
+        initial_rate = instance.rate
+        instance.rate = validated_data['rate']
+        instance.save()
+        if initial_rate == 'Like':
+            if instance.rate == 'Dislike':
+                instance.user.rating -= Decimal(0.20)
+                instance.comment.rating -= 2
+
+            elif instance.rate is None:
+                instance.user.rating -= Decimal(0.10)
+                instance.comment.rating -= 1
+
+        elif initial_rate == 'Dislike':
+            if instance.rate == 'Like':
+                instance.user.rating += Decimal(0.20)
+                instance.comment.rating += 2
+
+            elif instance.rate is None:
+                instance.user.rating += Decimal(0.10)
+                instance.comment.rating += 1
+
+        elif initial_rate is None:
+            if instance.rate == 'Like':
+                instance.user.rating += Decimal(0.10)
+                instance.comment.rating += 1
+
+            elif instance.rate == 'Dislike':
+                instance.user.rating -= Decimal(0.10)
+                instance.comment.rating -= 1
+
+        instance.comment.save()
+        instance.user.save()
+        return instance

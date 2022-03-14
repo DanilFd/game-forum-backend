@@ -8,7 +8,7 @@ from rest_framework_simplejwt.state import token_backend
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from comments.models import NewsComment
-from users.models import CustomUser, UserUserRelation
+from users.models import CustomUser, UserUserRelation, UserAction
 from users.utils import get_web_url
 
 
@@ -130,4 +130,5 @@ class RateUserSerializer(serializers.ModelSerializer):
             elif instance.rate == 'Dislike':
                 instance.user1.rating -= 1
                 instance.user1.save()
+        UserAction.objects.create(action_type="rate_user", user=instance.user2)
         return instance

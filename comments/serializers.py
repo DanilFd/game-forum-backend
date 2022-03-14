@@ -2,6 +2,7 @@ import decimal
 from rest_framework import serializers
 from comments.models import NewsComment, NewsCommentComplaint, UserCommentRelation
 from comments.serializer_fields import RecursiveField
+from users.models import UserAction
 from users.serializers import ModestUserProfileSerializer
 from decimal import Decimal
 
@@ -92,4 +93,5 @@ class RateCommentSerializer(serializers.ModelSerializer):
 
         instance.comment.save()
         instance.user.save()
+        UserAction.objects.create(action_type="rate_user", user=instance.user)
         return instance

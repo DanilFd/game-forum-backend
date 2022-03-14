@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.models import CustomUser, UserUserRelation, UserAction
-from users.permissions import get_permitted_messages_count
+from users.permissions import get_permitted_messages_count, RateCountPermission, get_permitted_rate_count
 from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
     CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer
 from users.utils import get_web_url
@@ -74,22 +74,26 @@ class UserListView(generics.ListAPIView):
 
 class RateUserView(generics.UpdateAPIView):
     serializer_class = RateUserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, RateCountPermission]
 
     def get_object(self):
         obj, _ = UserUserRelation.objects.get_or_create(user2=self.request.user,
                                                         user1=CustomUser.objects.get(login=self.kwargs['username']))
         return obj
 
+    def put(self, request, *args, **kwargs):
+        response = self.update(request, *args, **kwargs)
+        response.data['available_rate_count'] = get_permitted_rate_count(
+            self.request.user.rating) - UserAction.objects.filter(user=self.request.user,
+                                                                  action_type="rate_user").count()
+        return response
+
 
 class GetUserActionsView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        # actions = UserAction.objects.filter(user=self.request.user, moment__gt=datetime.date.today())
         data = dict(
-            # send_message=actions.filter(action_type='send_message').count(),
-            # rate_user=actions.filter(action_type='rate_user').count(),
             available_messages=get_permitted_messages_count(request.user.rating)
         )
         return Response(data)

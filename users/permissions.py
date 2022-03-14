@@ -4,7 +4,7 @@ import datetime
 from users.models import UserAction
 
 
-def get_permitted_messages_count(rating: float):
+def get_permitted_messages_count(rating):
     if rating > 100:
         return 12
     if rating > 50:
@@ -23,3 +23,24 @@ class MessageCountPermission(BasePermission):
                                                    action_type='send_message').count()
 
         return messages_count != get_permitted_messages_count(request.user.rating)
+
+
+def get_permitted_rate_count(rating):
+    if rating > 100:
+        return 30
+    if rating > 50:
+        return 20
+    if rating > 0:
+        return 10
+    if rating < 0:
+        return 5
+
+
+class RateCountPermission(BasePermission):
+    message = f"Вы превыслили ваш лимит голосований за сутки."
+
+    def has_permission(self, request, view):
+        rate_count = UserAction.objects.filter(user=request.user, moment__gt=datetime.date.today(),
+                                               action_type='rate_user').count()
+
+        return rate_count != get_permitted_rate_count(request.user.rating)

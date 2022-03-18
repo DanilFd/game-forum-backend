@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.exceptions import NotAcceptable
+
 from comments.models import NewsComment, NewsCommentComplaint, UserCommentRelation
 from comments.serializer_fields import RecursiveField
 from users.models import UserAction
@@ -41,6 +43,8 @@ class ListNewsCommentSerializer(serializers.ModelSerializer):
         return self.context['request'].user.id == obj.creator.id
 
     def get_rate(self, obj: NewsComment):
+        if not self.context['request'].user.is_authenticated:
+            return None
         found_rate = UserCommentRelation.objects.filter(user=self.context['request'].user, comment=obj).first()
         if found_rate is None:
             return None
@@ -67,6 +71,9 @@ class RateCommentSerializer(serializers.ModelSerializer):
         return obj.comment.rating
 
     def update(self, instance: UserCommentRelation, validated_data):
+        if instance.comment.is_deleted:
+            raise NotAcceptable()
+
         initial_rate = instance.rate
         instance.rate = validated_data['rate']
         instance.save()

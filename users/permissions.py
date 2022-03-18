@@ -42,7 +42,6 @@ class RateCountPermission(BasePermission):
     def has_permission(self, request, view):
         rate_count = UserAction.objects.filter(user=request.user, moment__gt=datetime.date.today(),
                                                action_type='rate_user').count()
-
         return rate_count != get_permitted_rate_count(request.user.rating)
 
 

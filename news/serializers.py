@@ -55,6 +55,6 @@ class ListNewsCategoriesSerializer(serializers.ModelSerializer):
 class FavoritesNewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "image", "creation_date", "categories", "games"]
+        fields = ["id", "title", "image", "creation_date", "games"]
 
     games = ModestGameSerializer(many=True)

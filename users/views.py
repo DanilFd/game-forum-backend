@@ -97,3 +97,9 @@ class GetUserActionsView(generics.RetrieveAPIView):
             available_messages=get_permitted_messages_count(request.user.rating)
         )
         return Response(data)
+
+
+class IsRegisteredView(generics.RetrieveAPIView):
+
+    def get(self, request, *args, **kwargs):
+        return Response(bool(CustomUser.objects.filter(login=self.request.data['login']).first()))

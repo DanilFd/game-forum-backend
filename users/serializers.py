@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.settings import api_settings
-from rest_framework_simplejwt.state import token_backend
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from comments.models import NewsComment
@@ -134,3 +133,21 @@ class RateUserSerializer(serializers.ModelSerializer):
                 instance.user1.save()
         UserAction.objects.create(action_type="rate_user", user=instance.user2)
         return instance
+
+
+class RegistrationByGoogleSerializer(serializers.ModelSerializer):
+    login = serializers.CharField(min_length=1, max_length=25)
+
+    class Meta:
+        model = CustomUser
+        fields = ['login', 'email', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(login=validated_data['login'], email=validated_data['email'],
+                                              password=validated_data['password'])
+        user.is_active = True
+        user.save()
+        return user

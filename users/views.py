@@ -16,7 +16,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.models import CustomUser, UserUserRelation, UserAction
 from users.permissions import get_permitted_messages_count, RateCountPermission, get_permitted_rate_count, CantLikeSelf
 from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
-    CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer
+    CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer, RegistrationByGoogleSerializer
 from users.utils import get_web_url
 
 
@@ -102,4 +102,25 @@ class GetUserActionsView(generics.RetrieveAPIView):
 class IsRegisteredView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
-        return Response(bool(CustomUser.objects.filter(login=self.request.data['login']).first()))
+        return Response(bool(CustomUser.objects.filter(login=self.kwargs['login']).first()))
+
+
+class RegistrationByGoogleView(generics.CreateAPIView):
+    serializer_class = RegistrationByGoogleSerializer
+
+    def post(self, request, *args, **kwargs):
+        self.create(request, *args, **kwargs)
+        web_url = get_web_url(self.request)
+        user = CustomUser.objects.get(login=self.request.data['login'])
+
+        def get_tokens_for_user():
+            refresh = RefreshToken.for_user(user)
+            refresh['login'] = user.login
+            refresh['role'] = user.role
+            refresh['profile_img'] = web_url + user.profile_img.url
+            return {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }
+
+        return Response(get_tokens_for_user())

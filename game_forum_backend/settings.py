@@ -209,6 +209,7 @@ customColorPalette = [
     },
 ]
 FRONTEND_URL = "localhost:3000"
+BACKEND_URL = "localhost:8000"
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['bold', 'italic', 'link',

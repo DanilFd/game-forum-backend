@@ -1,14 +1,22 @@
 from django.contrib import admin
 
 # Register your models here.
-from games.models import Game, Platform, Genre, UserGameRelation
+from games.models import Game, Platform, Genre, UserGameRelation, GameImage
+
+
+class ImageInline(admin.StackedInline):
+    model = GameImage
 
 
 @admin.register(Game)
 class GamesAdmin(admin.ModelAdmin):
-    list_display = ['title', 'release_date', 'score']
-    exclude = ['score']
+    list_display = ['title', 'release_date', 'rating']
+    exclude = ['slug']
     search_fields = ["title"]
+    readonly_fields = ['rating']
+    inlines = [
+        ImageInline
+    ]
 
 
 @admin.register(Platform)

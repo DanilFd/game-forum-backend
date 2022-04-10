@@ -49,3 +49,8 @@ class FollowingOnGameView(generics.UpdateAPIView):
         obj, _ = UserGameRelation.objects.get_or_create(user=self.request.user, game_id=self.kwargs['pk'])
         return obj
 
+
+class GameDetailView(generics.RetrieveAPIView):
+    serializer_class = GameSerializer
+    queryset = Game.objects.all()
+    lookup_field = 'slug'

@@ -79,6 +79,7 @@ class Game(models.Model):
     slug = models.SlugField(unique=True)
     rating = models.DecimalField(default=0, decimal_places=1, max_digits=3, validators=[MaxValueValidator(10)],
                                  verbose_name="Рейтинг")
+    developer = models.CharField(verbose_name="Разработчик", max_length=35)
 
     def save(self, *args, **kwargs):
         translated = self.title.translate(
@@ -91,14 +92,13 @@ class Game(models.Model):
             super(Game, self).save(*args, **kwargs)
 
         except IntegrityError as err:
-            if 'UNIQUE constraint' in err.message:
-                raise ValidationError({
-                    'Категория': 'Категория уже существует.'
-                })
+            print(err)
+            raise ValidationError({
+                'Категория': 'Категория уже существует.'
+            })
 
     def __str__(self):
         return self.title
-
 
 class UserGameRelation(models.Model):
     class Meta:

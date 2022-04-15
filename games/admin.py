@@ -10,7 +10,7 @@ class ImageInline(admin.StackedInline):
 
 @admin.register(Game)
 class GamesAdmin(admin.ModelAdmin):
-    list_display = ['title', 'release_date', 'rating']
+    list_display = ['title', 'release_date', 'rating', 'developer']
     exclude = ['slug']
     search_fields = ["title"]
     readonly_fields = ['rating']
@@ -33,4 +33,5 @@ class PlatformAdmin(admin.ModelAdmin):
 
 @admin.register(UserGameRelation)
 class UserGameRelationAdmin(admin.ModelAdmin):
-    list_display = ['game', 'user', 'is_following']
+    list_display = ['game', 'user', 'is_following','rate']
+

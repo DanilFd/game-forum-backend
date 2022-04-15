@@ -10,3 +10,5 @@ class NewsFilterSet(FilterSet):
         fields = ["categories"]
     category = CharFilter(field_name="categories__slug")
 
+
+

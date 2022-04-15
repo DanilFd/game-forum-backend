@@ -1,6 +1,6 @@
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
 
 from games.serializers import GameSerializer
@@ -43,3 +43,10 @@ class FavoritesNewsView(generics.ListAPIView):
     def get_queryset(self):
         return NewsItem.objects.filter(games__user_relations__is_following=True,
                                        games__user_relations__user=self.request.user).distinct()
+
+
+class SearchNewsView(generics.ListAPIView):
+    serializer_class = ListNewsItemSerializer
+    queryset = NewsItem.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']

@@ -34,7 +34,6 @@ class ListNewsCommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'creator', 'creation_date', 'content', 'is_owner', 'is_deleted', 'parent', 'rating', 'rate']
 
     is_owner = serializers.SerializerMethodField()
-    children = RecursiveField(many=True)
     creator = ModestUserProfileSerializer(read_only=True)
     creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
     rate = serializers.SerializerMethodField()

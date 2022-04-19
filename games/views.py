@@ -7,16 +7,15 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 
 from games.filters import GamesFilterSet
+from games.game_serializer import ListGameSerializer
 from games.models import Game, Genre, Platform, UserGameRelation
 from games.pagination import GamesPagination
-from games.serializers import GameSerializer, ListGenreSerializer, ListPlatformSerializer, UserGameRelationSerializer
-from news.models import NewsItem
-from news.pagination import NewsPagination
-from news.serializers import ListNewsItemSerializer
+from games.serializers import ListGenreSerializer, ListPlatformSerializer, UserGameRelationSerializer, \
+    GameDetailSerializer
 
 
 class ListGameView(generics.ListAPIView):
-    serializer_class = GameSerializer
+    serializer_class = ListGameSerializer
     queryset = Game.objects.all()
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = GamesFilterSet
@@ -51,6 +50,6 @@ class FollowingOnGameView(generics.UpdateAPIView):
 
 
 class GameDetailView(generics.RetrieveAPIView):
-    serializer_class = GameSerializer
+    serializer_class = GameDetailSerializer
     queryset = Game.objects.all()
     lookup_field = 'slug'

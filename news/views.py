@@ -3,7 +3,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
 
-from games.serializers import GameSerializer
 from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
 from news.pagination import NewsPagination

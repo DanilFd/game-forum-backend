@@ -1,11 +1,10 @@
 from rest_framework import serializers
 
 from comments.models import NewsComment
-from games.models import Game
-from games.serializers import GameSerializer, ModestGameSerializer
+from games.game_serializer import ListGameSerializer, ModestGameSerializer
 from news.models import NewsItem, NewsCategory
 from news.replace_content import replace_content
-from users.serializers import UserProfileSerializer, ModestUserProfileSerializer
+from users.serializers import ModestUserProfileSerializer
 
 
 class NewsItemCategorySerializer(serializers.ModelSerializer):
@@ -32,7 +31,7 @@ class DetailNewsItemSerializer(serializers.ModelSerializer):
     def get_content(self, obj):
         return replace_content(obj.content)
 
-    games = GameSerializer(read_only=True, many=True)
+    games = ListGameSerializer(read_only=True, many=True)
 
     class Meta:
         model = NewsItem

@@ -100,6 +100,7 @@ class Game(models.Model):
     def __str__(self):
         return self.title
 
+
 class UserGameRelation(models.Model):
     class Meta:
         verbose_name = "Избранная игра"

@@ -1,27 +1,17 @@
 from django.db.models import Avg
 from rest_framework import serializers
 
-from games.models import Game, Platform, Genre, UserGameRelation
+from games.lists_serializers import ListPlatformSerializer, ListGenreSerializer
+from games.models import Game, UserGameRelation
 from games.utils.convert_month_to_str import convert_month_to_str
+from news.serializers import DetailNewsItemSerializer
 
 
-class ListPlatformSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Platform
-        fields = ['id', "title", 'slug']
-
-
-class ListGenreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Genre
-        fields = ['id', "title", 'slug']
-
-
-class GameSerializer(serializers.ModelSerializer):
+class GameDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ['id', 'title', 'platforms', 'genres', 'release_date', 'img', 'is_following', 'slug',
-                  'rating', 'screenshots', 'developer', 'user_rating', 'rating_of_other_users']
+                  'rating', 'screenshots', 'developer', 'user_rating', 'rating_of_other_users', 'news']
 
     platforms = ListPlatformSerializer(many=True)
     genres = ListGenreSerializer(many=True)
@@ -30,6 +20,7 @@ class GameSerializer(serializers.ModelSerializer):
     screenshots = serializers.SlugRelatedField(many=True, read_only=True, slug_field="image_url")
     user_rating = serializers.SerializerMethodField()
     rating_of_other_users = serializers.SerializerMethodField()
+    news = DetailNewsItemSerializer(many=True, read_only=True)
 
     def get_rating_of_other_users(self, obj: Game):
         user = self.context['request'].user
@@ -83,9 +74,3 @@ class UserGameRelationSerializer(serializers.ModelSerializer):
             updated_relation.game.rating = updated_relation.game.user_relations.aggregate(Avg('rate'))['rate__avg'] or 0
             updated_relation.game.save()
         return updated_relation
-
-
-class ModestGameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Game
-        fields = ["id", "title"]

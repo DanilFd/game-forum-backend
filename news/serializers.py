@@ -57,3 +57,6 @@ class FavoritesNewsSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "image", "creation_date", "games"]
 
     games = ModestGameSerializer(many=True)
+
+
+

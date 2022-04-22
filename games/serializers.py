@@ -4,14 +4,15 @@ from rest_framework import serializers
 from games.lists_serializers import ListPlatformSerializer, ListGenreSerializer
 from games.models import Game, UserGameRelation
 from games.utils.convert_month_to_str import convert_month_to_str
-from news.serializers import DetailNewsItemSerializer
+from news.models import NewsItem
+from news.serializers import ListNewsItemSerializer
 
 
 class GameDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ['id', 'title', 'platforms', 'genres', 'release_date', 'img', 'is_following', 'slug',
-                  'rating', 'screenshots', 'developer', 'user_rating', 'rating_of_other_users', 'news']
+                  'rating', 'screenshots', 'developer', 'user_rating', 'rating_of_other_users', 'news_count']
 
     platforms = ListPlatformSerializer(many=True)
     genres = ListGenreSerializer(many=True)
@@ -20,7 +21,10 @@ class GameDetailSerializer(serializers.ModelSerializer):
     screenshots = serializers.SlugRelatedField(many=True, read_only=True, slug_field="image_url")
     user_rating = serializers.SerializerMethodField()
     rating_of_other_users = serializers.SerializerMethodField()
-    news = DetailNewsItemSerializer(many=True, read_only=True)
+    news_count = serializers.SerializerMethodField()
+
+    def get_news_count(self, obj: Game):
+        return NewsItem.objects.filter(games=obj).count()
 
     def get_rating_of_other_users(self, obj: Game):
         user = self.context['request'].user

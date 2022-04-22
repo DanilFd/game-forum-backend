@@ -49,3 +49,10 @@ class SearchNewsView(generics.ListAPIView):
     queryset = NewsItem.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['title']
+
+
+class ListNewsForGameDetailView(generics.ListAPIView):
+    serializer_class = ListNewsItemSerializer
+
+    def get_queryset(self):
+        return NewsItem.objects.filter(games__in=[self.kwargs['pk']])

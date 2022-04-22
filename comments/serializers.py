@@ -11,10 +11,11 @@ from decimal import Decimal
 class CreateCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsComment
-        fields = ['id', 'creator', 'creation_date', 'content', 'parent', 'children', "news_item", 'is_owner']
+        fields = ['id', 'creator', 'creation_date', 'content', 'parent', 'children', "news_item", 'is_owner', 'rating']
         extra_kwargs = {
             'news_item': {'write_only': True}
         }
+        read_only_fields = ['rating']
 
     is_owner = serializers.SerializerMethodField()
     creator = ModestUserProfileSerializer(read_only=True)

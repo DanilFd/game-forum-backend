@@ -1,7 +1,6 @@
 import datetime
 
 import requests
-from django.contrib.sites.shortcuts import get_current_site
 
 # Create your views here.
 from django.utils.encoding import force_text
@@ -85,6 +84,7 @@ class RateUserView(generics.UpdateAPIView):
         response = self.update(request, *args, **kwargs)
         response.data['available_rate_count'] = get_permitted_rate_count(
             self.request.user.rating) - UserAction.objects.filter(user=self.request.user,
+                                                                  moment__gt=datetime.date.today(),
                                                                   action_type="rate_user").count()
         return response
 
@@ -97,7 +97,7 @@ class GetUserActionsView(generics.RetrieveAPIView):
             available_messages=get_permitted_messages_count(request.user.rating)
         )
         return Response(data)
-
+7
 
 class IsRegisteredView(generics.RetrieveAPIView):
 

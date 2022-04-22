@@ -72,7 +72,7 @@ REST_FRAMEWORK = {
 ROOT_URLCONF = 'game_forum_backend.urls'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'https://game-forum-frontend.herokuapp.com'
+    'https://react-frt.herokuapp.com'
 ]
 CORS_ALLOW_CREDENTIALS = True
 TEMPLATES = [

@@ -56,7 +56,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Пользователи'
 
     profile_img = models.ImageField(verbose_name="Изображение профиля", default="defaultProfileImg.png")
-    login = models.CharField(verbose_name="Логин", max_length=20, unique=True, validators=[MinLengthValidator(6)])
+    login = models.CharField(verbose_name="Логин", max_length=20, unique=True, validators=[MinLengthValidator(5)])
     email = models.EmailField(verbose_name="Email", max_length=35, unique=True)
     gender = models.CharField(verbose_name="Пол", choices=GENDER_CHOICES, max_length=15, default='Не указан')
     birthday_date = models.DateField(verbose_name="Дата рождения", null=True, blank=True)

@@ -11,6 +11,9 @@ from comments.pagination import NewsCommentPagination
 from comments.serializers import CreateCommentSerializer, ListNewsCommentSerializer, CreateComplaintSerializer, \
     RateCommentSerializer
 from news.models import NewsItem
+from users.models import UserAction
+from users.permissions import CantLikeSelfComment, RateCountPermission, get_permitted_rate_count
+import datetime
 
 
 class CreateCommentView(generics.CreateAPIView):
@@ -51,10 +54,18 @@ class DeleteNewsCommentView(generics.DestroyAPIView):
 
 
 class RateCommentView(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CantLikeSelfComment, RateCountPermission]
     serializer_class = RateCommentSerializer
 
     def get_object(self):
         obj, _ = UserCommentRelation.objects.get_or_create(user=self.request.user,
                                                            comment=NewsComment.objects.get(id=self.kwargs['pk']))
         return obj
+
+    def put(self, request, *args, **kwargs):
+        response = self.update(request, *args, **kwargs)
+        response.data['available_rate_count'] = get_permitted_rate_count(
+            self.request.user.rating) - UserAction.objects.filter(user=self.request.user,
+                                                                  moment__gt=datetime.date.today(),
+                                                                  action_type="rate_user").count()
+        return response

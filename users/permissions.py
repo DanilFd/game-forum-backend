@@ -1,17 +1,18 @@
 from rest_framework.permissions import BasePermission
 import datetime
 
-from users.models import UserAction, UserUserRelation
+from comments.models import NewsComment
+from users.models import UserAction
 
 
 def get_permitted_messages_count(rating):
-    if rating > 100:
+    if rating >= 100:
         return 12
-    if rating > 50:
+    if rating >= 50:
         return 6
     if rating > 0:
         return 4
-    if rating < 0:
+    if rating <= 0:
         return 2
 
 
@@ -26,9 +27,9 @@ class MessageCountPermission(BasePermission):
 
 
 def get_permitted_rate_count(rating):
-    if rating > 100:
+    if rating >= 100:
         return 30
-    if rating > 50:
+    if rating >= 50:
         return 20
     if rating > 0:
         return 10
@@ -42,6 +43,7 @@ class RateCountPermission(BasePermission):
     def has_permission(self, request, view):
         rate_count = UserAction.objects.filter(user=request.user, moment__gt=datetime.date.today(),
                                                action_type='rate_user').count()
+
         return rate_count != get_permitted_rate_count(request.user.rating)
 
 
@@ -49,5 +51,11 @@ class CantLikeSelf(BasePermission):
     message = "Вы не можете оценить себя."
 
     def has_permission(self, request, view):
-
         return request.user.login != view.kwargs['username']
+
+
+class CantLikeSelfComment(BasePermission):
+    message = "Вы не можете оценить свой комментарий."
+
+    def has_permission(self, request, view):
+        return request.user != NewsComment.objects.get(id=view.kwargs['pk']).creator

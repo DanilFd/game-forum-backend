@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 
@@ -11,7 +11,7 @@ from games.game_serializer import ListGameSerializer
 from games.models import Game, Genre, Platform, UserGameRelation
 from games.pagination import GamesPagination
 from games.serializers import ListGenreSerializer, ListPlatformSerializer, UserGameRelationSerializer, \
-    GameDetailSerializer
+    GameDetailSerializer, ModestGameSerializer
 
 
 class ListGameView(generics.ListAPIView):
@@ -53,3 +53,11 @@ class GameDetailView(generics.RetrieveAPIView):
     serializer_class = GameDetailSerializer
     queryset = Game.objects.all()
     lookup_field = 'slug'
+
+
+class SearchGamesView(generics.ListAPIView):
+    serializer_class = ModestGameSerializer
+    queryset = Game.objects.all()
+    filter_backends = [filters.SearchFilter]
+    pagination_class = GamesPagination
+    search_fields = ['title']

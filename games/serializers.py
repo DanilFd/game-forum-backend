@@ -5,7 +5,6 @@ from games.lists_serializers import ListPlatformSerializer, ListGenreSerializer
 from games.models import Game, UserGameRelation
 from games.utils.convert_month_to_str import convert_month_to_str
 from news.models import NewsItem
-from news.serializers import ListNewsItemSerializer
 
 
 class GameDetailSerializer(serializers.ModelSerializer):
@@ -78,3 +77,16 @@ class UserGameRelationSerializer(serializers.ModelSerializer):
             updated_relation.game.rating = updated_relation.game.user_relations.aggregate(Avg('rate'))['rate__avg'] or 0
             updated_relation.game.save()
         return updated_relation
+
+
+class ModestGameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = ['id', 'title', 'platforms', 'release_date', 'img', 'rating', 'slug']
+
+    platforms = ListPlatformSerializer(many=True)
+    release_date = serializers.SerializerMethodField()
+
+    def get_release_date(self, obj: Game):
+        month = convert_month_to_str(obj.release_date.month)
+        return f"{obj.release_date.day} {month} {obj.release_date.year} г."

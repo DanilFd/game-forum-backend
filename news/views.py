@@ -7,7 +7,7 @@ from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
 from news.pagination import NewsPagination
 from news.serializers import ListNewsItemSerializer, \
-    DetailNewsItemSerializer, ListNewsCategoriesSerializer, FavoritesNewsSerializer
+    DetailNewsItemSerializer, ListNewsCategoriesSerializer, FavoritesNewsSerializer, ModestNewsListSerializer
 
 
 class ListNewsItemView(generics.ListAPIView):
@@ -45,9 +45,10 @@ class FavoritesNewsView(generics.ListAPIView):
 
 
 class SearchNewsView(generics.ListAPIView):
-    serializer_class = ListNewsItemSerializer
+    serializer_class = ModestNewsListSerializer
     queryset = NewsItem.objects.all()
     filter_backends = [filters.SearchFilter]
+    pagination_class = NewsPagination
     search_fields = ['title']
 
 

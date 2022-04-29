@@ -151,3 +151,14 @@ class RegistrationByGoogleSerializer(serializers.ModelSerializer):
         user.is_active = True
         user.save()
         return user
+
+
+class ModestUserForSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'login', 'rating', 'date_joined', 'profile_img', 'comments_count']
+
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: CustomUser):
+        return NewsComment.objects.filter(creator=obj).count()

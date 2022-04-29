@@ -13,9 +13,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.models import CustomUser, UserUserRelation, UserAction
+from users.pagination import UsersPagination
 from users.permissions import get_permitted_messages_count, RateCountPermission, get_permitted_rate_count, CantLikeSelf
 from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
-    CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer, RegistrationByGoogleSerializer
+    CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer, RegistrationByGoogleSerializer, \
+    ModestUserForSearchSerializer
 from users.utils import get_web_url
 
 
@@ -97,7 +99,7 @@ class GetUserActionsView(generics.RetrieveAPIView):
             available_messages=get_permitted_messages_count(request.user.rating)
         )
         return Response(data)
-7
+
 
 class IsRegisteredView(generics.RetrieveAPIView):
 
@@ -124,3 +126,11 @@ class RegistrationByGoogleView(generics.CreateAPIView):
             }
 
         return Response(get_tokens_for_user())
+
+
+class SearchUserView(generics.ListAPIView):
+    serializer_class = ModestUserForSearchSerializer
+    queryset = CustomUser.objects.all()
+    filter_backends = [filters.SearchFilter]
+    pagination_class = UsersPagination
+    search_fields = ['login']

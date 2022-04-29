@@ -31,11 +31,11 @@ class DetailNewsItemSerializer(serializers.ModelSerializer):
     def get_content(self, obj):
         return replace_content(obj.content)
 
-    games = ListGameSerializer(read_only=True, many=True)
-
     class Meta:
         model = NewsItem
         fields = ["id", "title", "content", "views_count", "creation_date", "games", "creator", "comments_count"]
+
+    games = ListGameSerializer(read_only=True, many=True)
 
     comments_count = serializers.SerializerMethodField()
 
@@ -59,4 +59,9 @@ class FavoritesNewsSerializer(serializers.ModelSerializer):
     games = ModestGameSerializer(many=True)
 
 
+class ModestNewsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = ['id', "title", "image", "creation_date"]
 
+    creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)

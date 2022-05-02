@@ -162,3 +162,9 @@ class ModestUserForSearchSerializer(serializers.ModelSerializer):
 
     def get_comments_count(self, obj: CustomUser):
         return NewsComment.objects.filter(creator=obj).count()
+
+
+class ModestUserForBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['login', 'profile_img']

@@ -12,3 +12,4 @@ class ListBlogSerializer(serializers.ModelSerializer):
 
     creator = ModestUserForBlogSerializer()
     creation_date = serializers.DateField(format="%d.%m.%Y", read_only=True)
+

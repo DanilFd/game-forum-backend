@@ -20,7 +20,7 @@ class ListGameView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = GamesFilterSet
     pagination_class = GamesPagination
-    ordering_fields = ('release_date', 'score')
+    ordering_fields = ('release_date', 'rating')
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, args, kwargs)

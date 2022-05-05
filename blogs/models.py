@@ -21,3 +21,8 @@ class Blog(models.Model):
         return self.title
 
 
+class ContentImage(models.Model):
+    class Meta:
+        pass
+
+    image = models.ImageField()

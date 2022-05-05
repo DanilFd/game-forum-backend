@@ -18,3 +18,13 @@ class ContentImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentImage
         fields = ['image']
+
+
+class CreateBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = ["title", "img", 'content', 'creator']
+
+    def create(self, validated_data):
+        validated_data['creator'] = self.context['request'].user
+        return super().create(validated_data)

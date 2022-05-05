@@ -15,7 +15,7 @@ class Blog(models.Model):
     creator = models.ForeignKey(CustomUser, verbose_name="Создатель", on_delete=models.CASCADE, blank=True)
     rating = models.IntegerField(default=0, verbose_name="Рейтинг")
     views_count = models.IntegerField(verbose_name="Количество просмотров", default=0)
-    content = models.TextField(verbose_name="Контент")
+    content = models.JSONField(verbose_name="Контент")
 
     def __str__(self):
         return self.title
@@ -26,3 +26,5 @@ class ContentImage(models.Model):
         pass
 
     image = models.ImageField()
+
+

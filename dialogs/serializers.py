@@ -12,7 +12,7 @@ class CreateDialogSerializer(serializers.ModelSerializer):
         fields = ['title', 'responder', 'content']
 
     content = serializers.CharField(write_only=True)
-    responder = serializers.CharField(max_length=20, min_length=6)
+    responder = serializers.CharField(max_length=20, min_length=5)
 
     def create(self, validated_data):
         owner = self.context['request'].user

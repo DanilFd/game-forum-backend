@@ -20,7 +20,7 @@ class NewsComment(models.Model):
     news_item = models.ForeignKey(NewsItem, verbose_name="Новость", on_delete=models.CASCADE, related_name="comments")
     creator = models.ForeignKey(CustomUser, verbose_name='Создатель', on_delete=models.CASCADE)
     creation_date = models.DateTimeField(verbose_name="Дата публикации", auto_now_add=True)
-    content = models.TextField(verbose_name="Контент")
+    content = models.TextField(verbose_name="Контент", max_length=100)
     parent = models.ForeignKey('NewsComment', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
     is_deleted = models.BooleanField(verbose_name="Удален ли", default=False)
     rating = models.IntegerField(default=0)

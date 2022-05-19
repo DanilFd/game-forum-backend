@@ -1,6 +1,7 @@
 from rest_framework.permissions import BasePermission
 import datetime
 
+from blogs.models import Blog
 from comments.models import NewsComment
 from users.models import UserAction
 
@@ -59,3 +60,10 @@ class CantLikeSelfComment(BasePermission):
 
     def has_permission(self, request, view):
         return request.user != NewsComment.objects.get(id=view.kwargs['pk']).creator
+
+
+class CantLikeSelfBLog(BasePermission):
+    message = "Вы не можете оцений свой блог."
+
+    def has_permission(self, request, view):
+        return request.user != Blog.objects.get(id=view.kwargs['pk']).creator

@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'games',
     'dialogs',
     'comments',
-    'blogs'
+    'blogs',
 ]
 
 MIDDLEWARE = [

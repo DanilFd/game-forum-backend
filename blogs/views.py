@@ -1,18 +1,19 @@
 # Create your views here.
-from urllib.request import urlopen
 
-from django.core.files.temp import NamedTemporaryFile
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.core.files import File
-from blogs.filters import BlogsFilterSet
-from blogs.models import Blog
-from blogs.pagination import BlogsPagination
-from blogs.serializers import ListBlogSerializer, ContentImageSerializer, CreateBlogSerializer
 
+from blogs.filters import BlogsFilterSet
+from blogs.models import Blog, BlogUserRelation
+from blogs.pagination import BlogsPagination
+from blogs.serializers import ListBlogSerializer, ContentImageSerializer, CreateBlogSerializer, ModestBlogsSerializer, \
+    BlogDetailSerializer, RateBlogSerializer
+from users.models import UserAction
+from users.permissions import get_permitted_rate_count, RateCountPermission, CantLikeSelfBLog
+import datetime
 from users.utils import get_web_url
 
 
@@ -45,3 +46,40 @@ class FileUploadAPI(generics.GenericAPIView):
 class CreateBlogView(generics.CreateAPIView):
     serializer_class = CreateBlogSerializer
     permission_classes = [IsAuthenticated]
+
+
+class SearchBlogsView(generics.ListAPIView):
+    serializer_class = ModestBlogsSerializer
+    queryset = Blog.objects.all()
+    filter_backends = [filters.SearchFilter]
+    pagination_class = BlogsPagination
+    search_fields = ['title']
+
+
+class BlogDetailView(generics.RetrieveAPIView):
+    serializer_class = BlogDetailSerializer
+    queryset = Blog.objects.all()
+
+    def get_object(self):
+        obj = super().get_object()
+        obj.views_count += 1
+        obj.save()
+        return obj
+
+
+class RateBlogView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated, CantLikeSelfBLog, RateCountPermission]
+    serializer_class = RateBlogSerializer
+
+    def get_object(self):
+        obj, _ = BlogUserRelation.objects.get_or_create(user=self.request.user,
+                                                        blog=Blog.objects.get(id=self.kwargs['pk']))
+        return obj
+
+    def put(self, request, *args, **kwargs):
+        response = self.update(request, *args, **kwargs)
+        response.data['available_rate_count'] = get_permitted_rate_count(
+            self.request.user.rating) - UserAction.objects.filter(user=self.request.user,
+                                                                  moment__gt=datetime.date.today(),
+                                                                  action_type="rate_user").count()
+        return response

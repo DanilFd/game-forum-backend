@@ -1,12 +1,12 @@
 from math import ceil
 
 from comments.models import NewsComment
-from comments.serializers import ListNewsCommentSerializer
+from comments.serializers import ListNewsCommentSerializer, ListBlogCommentSerializer
 
 page_size = 10
 
 
-def paginate_comments(root_comments: list[NewsComment], page_number: int, context):
+def paginate_comments(root_comments: list[NewsComment], page_number: int, context, is_news: bool):
     paginated_comments = dict(
         comments_count=0,
         results=[]
@@ -19,11 +19,18 @@ def paginate_comments(root_comments: list[NewsComment], page_number: int, contex
     comments_is_set = False
 
     def set_comments():
-        paginated_comments['results'] = ListNewsCommentSerializer(
-            current_page_['comments'],
-            many=True,
-            context=context
-        ).data
+        if is_news:
+            paginated_comments['results'] = ListNewsCommentSerializer(
+                current_page_['comments'],
+                many=True,
+                context=context
+            ).data
+        else:
+            paginated_comments['results'] = ListBlogCommentSerializer(
+                current_page_['comments'],
+                many=True,
+                context=context
+            ).data
 
     def get_page(comments: list[NewsComment]):
         nonlocal comments_is_set

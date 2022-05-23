@@ -3,7 +3,6 @@ from decimal import Decimal
 from rest_framework import serializers
 
 from blogs.models import Blog, ContentImage, BlogUserRelation
-from games.utils.convert_month_to_str import convert_month_to_str
 from users.models import UserAction
 from users.serializers import ModestUserForBlogSerializer, ModestUserProfileSerializer
 
@@ -37,7 +36,7 @@ class ModestBlogsSerializer(serializers.ModelSerializer):
         model = Blog
         fields = ['id', 'title', 'img', 'creation_date']
 
-    creation_date = serializers.DateField(format="%d.%m.%Y", read_only=True)
+    creation_date = serializers.DateTimeField(format="%d.%m.%Y", read_only=True)
 
 
 class BlogDetailSerializer(serializers.ModelSerializer):
@@ -104,3 +103,9 @@ class RateBlogSerializer(serializers.ModelSerializer):
         instance.user.save()
         UserAction.objects.create(action_type="rate_user", user=instance.user)
         return instance
+
+
+class BlogSourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = ['id', 'title']

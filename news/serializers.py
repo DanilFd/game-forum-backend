@@ -65,3 +65,9 @@ class ModestNewsListSerializer(serializers.ModelSerializer):
         fields = ['id', "title", "image", "creation_date"]
 
     creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
+
+
+class NewsSourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = ['id', 'title']

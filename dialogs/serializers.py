@@ -45,7 +45,6 @@ class SendMessageSerializer(serializers.ModelSerializer):
         return obj.id == obj.dialog.messages.earliest('sending_date').id
 
     def create(self, validated_data):
-        print("kwargs:", validated_data)
         if not validated_data['dialog'].user_that_deleted is None:
             raise NotAcceptable(detail="Диалог удален")
         user = self.context['request'].user

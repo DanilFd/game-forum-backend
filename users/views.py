@@ -15,9 +15,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.models import CustomUser, UserUserRelation, UserAction
 from users.pagination import UsersPagination
 from users.permissions import get_permitted_messages_count, RateCountPermission, get_permitted_rate_count, CantLikeSelf
-from users.serializers import CustomTokeObtainPairSerializer, UserProfileSerializer, UserProfileEditSerializer, \
+from users.serializers import CustomTokeObtainPairSerializer, UserProfileEditSerializer, \
     CustomTokenRefreshSerializer, ModestUserSerializer, RateUserSerializer, RegistrationByGoogleSerializer, \
     ModestUserForSearchSerializer
+from users.user_profile_serializer import UserProfileSerializer
 from users.utils import get_web_url
 
 

@@ -149,3 +149,4 @@ class ModestUserProfileSerializer(serializers.ModelSerializer):
 
     def get_comments_count(self, obj: CustomUser):
         return NewsComment.objects.filter(creator=obj).count()
+

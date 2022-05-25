@@ -90,3 +90,4 @@ class ModestGameSerializer(serializers.ModelSerializer):
     def get_release_date(self, obj: Game):
         month = convert_month_to_str(obj.release_date.month)
         return f"{obj.release_date.day} {month} {obj.release_date.year} г."
+

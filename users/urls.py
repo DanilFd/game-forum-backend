@@ -2,7 +2,8 @@ from django.urls import path, include
 
 from users.views import CustomTokeObtainPairView, UserActivationView, UserProfileView, UserProfileEditView, \
     CustomTokenRefreshView, UserListView, RateUserView, GetUserActionsView, IsRegisteredView, RegistrationByGoogleView, \
-    SearchUserView
+    SearchUserView, UserBlogsListView, UserCommentsListView, \
+    ListUserFavoriteGameView, ListUserRatedGameView
 
 urlpatterns = [
     path('login/', CustomTokeObtainPairView.as_view(), name='token_obtain_pair'),
@@ -17,5 +18,9 @@ urlpatterns = [
     path('actions/', GetUserActionsView.as_view()),
     path('is-registered/<str:login>/', IsRegisteredView.as_view()),
     path('registration-by-google/', RegistrationByGoogleView.as_view()),
-    path('search/', SearchUserView.as_view())
+    path('search/', SearchUserView.as_view()),
+    path('blogs/<int:pk>/', UserBlogsListView.as_view()),
+    path('comments/<int:pk>/', UserCommentsListView.as_view()),
+    path('games/favorite/<int:pk>/', ListUserFavoriteGameView.as_view()),
+    path('games/rated/<int:pk>/', ListUserRatedGameView.as_view()),
 ]

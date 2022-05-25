@@ -18,19 +18,14 @@ def paginate_comments(root_comments: list[NewsComment], page_number: int, contex
     )
     comments_is_set = False
 
+    serializer = ListNewsCommentSerializer if is_news else ListBlogCommentSerializer
+
     def set_comments():
-        if is_news:
-            paginated_comments['results'] = ListNewsCommentSerializer(
-                current_page_['comments'],
-                many=True,
-                context=context
-            ).data
-        else:
-            paginated_comments['results'] = ListBlogCommentSerializer(
-                current_page_['comments'],
-                many=True,
-                context=context
-            ).data
+        paginated_comments['results'] = serializer(
+            current_page_['comments'],
+            many=True,
+            context=context
+        ).data
 
     def get_page(comments: list[NewsComment]):
         nonlocal comments_is_set

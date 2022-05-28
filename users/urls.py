@@ -21,6 +21,6 @@ urlpatterns = [
     path('search/', SearchUserView.as_view()),
     path('blogs/<int:pk>/', UserBlogsListView.as_view()),
     path('comments/<int:pk>/', UserCommentsListView.as_view()),
-    path('games/favorite/<int:pk>/', ListUserFavoriteGameView.as_view()),
-    path('games/rated/<int:pk>/', ListUserRatedGameView.as_view()),
+    path('favorite_games/<int:pk>/', ListUserFavoriteGameView.as_view()),
+    path('rated_games/<int:pk>/', ListUserRatedGameView.as_view()),
 ]

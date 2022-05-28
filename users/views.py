@@ -172,7 +172,7 @@ class UserCommentsListView(generics.ListAPIView):
             paginated_comments = paginator.page(1)
         except EmptyPage:
             return Response(dict(detail="Неправильная страница"))
-        return Response(dict(result=list(paginated_comments), count=paginator.count))
+        return Response(dict(results=list(paginated_comments), count=paginator.count))
 
 
 class ListUserFavoriteGameView(generics.ListAPIView):

@@ -108,4 +108,9 @@ class RateBlogSerializer(serializers.ModelSerializer):
 class BlogSourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'is_news_comment']
+
+    is_news_comment = serializers.SerializerMethodField()
+
+    def get_is_news_comment(self, obj):
+        return False

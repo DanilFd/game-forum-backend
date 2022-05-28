@@ -70,4 +70,9 @@ class ModestNewsListSerializer(serializers.ModelSerializer):
 class NewsSourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'is_news_comment']
+
+    is_news_comment = serializers.SerializerMethodField()
+
+    def get_is_news_comment(self, obj):
+        return True

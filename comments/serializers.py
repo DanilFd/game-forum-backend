@@ -149,7 +149,7 @@ class ListBlogCommentSerializer(ListCommentSerializerMixin, serializers.ModelSer
     def get_rate(self, obj: BlogComment):
         if not self.context['request'].user.is_authenticated:
             return None
-        found_rate = UserBlogCommentRelation.objects.filter(user=self.context['request'].user,  comment=obj).first()
+        found_rate = UserBlogCommentRelation.objects.filter(user=self.context['request'].user, comment=obj).first()
         if found_rate is None:
             return None
         return found_rate.rate

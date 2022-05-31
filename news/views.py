@@ -1,13 +1,14 @@
 # Create your views here.
+import datetime
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
-
 from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
 from news.pagination import NewsPagination
 from news.serializers import ListNewsItemSerializer, \
-    DetailNewsItemSerializer, ListNewsCategoriesSerializer, FavoritesNewsSerializer, ModestNewsListSerializer
+    DetailNewsItemSerializer, ListNewsCategoriesSerializer, FavoritesNewsSerializer, ModestNewsListSerializer, \
+    BestsForMonthNewsSerializer
 
 
 class ListNewsItemView(generics.ListAPIView):
@@ -57,3 +58,9 @@ class ListNewsForGameDetailView(generics.ListAPIView):
 
     def get_queryset(self):
         return NewsItem.objects.filter(games__in=[self.kwargs['pk']])
+
+#
+# class BestsForMonthNewsView(generics.ListAPIView):
+#     serializer_class = BestsForMonthNewsSerializer
+#     def get_queryset(self):
+#         return NewsItem.objects.filter(creation_date__gt=datetime.datetime.now() - relativedelta(months=1)).order_by('views_count')[:5]

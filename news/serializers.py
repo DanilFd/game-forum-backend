@@ -76,3 +76,14 @@ class NewsSourceSerializer(serializers.ModelSerializer):
 
     def get_is_news_comment(self, obj):
         return True
+
+
+class BestsForMonthNewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = ['id', 'title', 'creation_date', 'image', 'comments_count']
+
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: NewsItem):
+        return NewsComment.objects.filter(news_item_id=obj.id).count()

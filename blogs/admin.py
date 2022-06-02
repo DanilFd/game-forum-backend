@@ -10,7 +10,7 @@ class BlogsAdmin(admin.ModelAdmin):
     list_display = ["title", 'views_count', 'creation_date']
     search_fields = ["title"]
     sortable_by = ['views_count', 'creation_date']
-    readonly_fields = ['creator']
+    readonly_fields = ['creator', 'img', 'rating']
 
     def save_model(self, request, obj, form, change):
         obj.creator = request.user

@@ -3,6 +3,7 @@ from decimal import Decimal
 from rest_framework import serializers
 
 from blogs.models import Blog, ContentImage, BlogUserRelation
+from comments.models import BlogComment
 from users.models import UserAction
 from users.serializers import ModestUserForBlogSerializer, ModestUserProfileSerializer
 
@@ -10,9 +11,14 @@ from users.serializers import ModestUserForBlogSerializer, ModestUserProfileSeri
 class ListBlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        fields = ["id", "title", "img", "creation_date", "rating", "views_count", 'content', 'creator']
+        fields = ["id", "title", "img", "creation_date", "rating", "views_count", 'content', 'creator',
+                  'comments_count']
 
     creator = ModestUserForBlogSerializer()
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: Blog):
+        return BlogComment.objects.filter(blog_item_id=obj.id).count()
 
 
 class ContentImageSerializer(serializers.ModelSerializer):
@@ -42,10 +48,12 @@ class ModestBlogsSerializer(serializers.ModelSerializer):
 class BlogDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        fields = ["id", "title", "creation_date", "rating", "views_count", 'content', 'creator', 'rate']
+        fields = ["id", "title", "creation_date", "rating", "views_count", 'content', 'creator', 'rate',
+                  'comments_count']
 
     creator = ModestUserProfileSerializer()
     rate = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
 
     def get_rate(self, obj: Blog):
         if not self.context['request'].user.is_authenticated:
@@ -54,6 +62,9 @@ class BlogDetailSerializer(serializers.ModelSerializer):
         if found_rate is None:
             return None
         return found_rate.rate
+
+    def get_comments_count(self, obj: Blog):
+        return BlogComment.objects.filter(blog_item_id=obj.id).count()
 
 
 class RateBlogSerializer(serializers.ModelSerializer):
@@ -114,3 +125,18 @@ class BlogSourceSerializer(serializers.ModelSerializer):
 
     def get_is_news_comment(self, obj):
         return False
+
+
+class BestBLogsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = ['id', 'title', 'creation_date', 'creator', 'comments_count', 'img']
+
+    creator = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: Blog):
+        return BlogComment.objects.filter(blog_item_id=obj.id).count()
+
+    def get_creator(self, obj: Blog):
+        return obj.creator.login

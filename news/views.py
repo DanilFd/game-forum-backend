@@ -1,14 +1,18 @@
 # Create your views here.
 import datetime
+from dateutil.relativedelta import relativedelta
+from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
+
+from comments.models import NewsComment
 from news.filters import NewsFilterSet
 from news.models import NewsItem, NewsCategory
 from news.pagination import NewsPagination
 from news.serializers import ListNewsItemSerializer, \
     DetailNewsItemSerializer, ListNewsCategoriesSerializer, FavoritesNewsSerializer, ModestNewsListSerializer, \
-    BestsForMonthNewsSerializer
+    BestsForMonthNewsSerializer, DiscussedNewsForWeekSerializer, LastsNewsSerializer
 
 
 class ListNewsItemView(generics.ListAPIView):
@@ -59,8 +63,26 @@ class ListNewsForGameDetailView(generics.ListAPIView):
     def get_queryset(self):
         return NewsItem.objects.filter(games__in=[self.kwargs['pk']])
 
-#
-# class BestsForMonthNewsView(generics.ListAPIView):
-#     serializer_class = BestsForMonthNewsSerializer
-#     def get_queryset(self):
-#         return NewsItem.objects.filter(creation_date__gt=datetime.datetime.now() - relativedelta(months=1)).order_by('views_count')[:5]
+
+class BestsForMonthNewsView(generics.ListAPIView):
+    serializer_class = BestsForMonthNewsSerializer
+
+    def get_queryset(self):
+        return NewsItem.objects.filter(creation_date__gt=datetime.datetime.now() - relativedelta(months=1)).order_by(
+            '-views_count')[:5]
+
+
+class DiscussedNewsForWeekView(generics.ListAPIView):
+    serializer_class = DiscussedNewsForWeekSerializer
+
+    def get_queryset(self):
+        return NewsItem.objects.filter(
+            creation_date__gt=datetime.datetime.now() - relativedelta(weeks=1)).annotate(
+            comments_count=Count("news_comments")).order_by('-comments_count')[:6]
+
+
+class LastsNewsView(generics.ListAPIView):
+    serializer_class = LastsNewsSerializer
+
+    def get_queryset(self):
+        return NewsItem.objects.filter().order_by('-creation_date')[:6]

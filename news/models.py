@@ -44,7 +44,7 @@ class NewsItem(models.Model):
         ordering = ['-creation_date']
 
     title = models.CharField(verbose_name="Заголовок", max_length=130)
-    image = models.ImageField(verbose_name="Изображение")
+    img = models.ImageField(verbose_name="Изображение")
     content = CKEditor5Field(verbose_name="Контент", config_name='extends')
     views_count = models.IntegerField(verbose_name="Количество просмотров", default=0)
     creation_date = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)

@@ -1,5 +1,5 @@
 # Create your views here.
-
+from dateutil.relativedelta import relativedelta
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.filters import OrderingFilter
@@ -10,7 +10,7 @@ from blogs.filters import BlogsFilterSet
 from blogs.models import Blog, BlogUserRelation
 from blogs.pagination import BlogsPagination
 from blogs.serializers import ListBlogSerializer, ContentImageSerializer, CreateBlogSerializer, ModestBlogsSerializer, \
-    BlogDetailSerializer, RateBlogSerializer
+    BlogDetailSerializer, RateBlogSerializer, BestBLogsSerializer
 from users.models import UserAction
 from users.permissions import get_permitted_rate_count, RateCountPermission, CantLikeSelfBLog
 import datetime
@@ -83,3 +83,11 @@ class RateBlogView(generics.UpdateAPIView):
                                                                   moment__gt=datetime.date.today(),
                                                                   action_type="rate_user").count()
         return response
+
+
+class BestsBlogsView(generics.ListAPIView):
+    serializer_class = BestBLogsSerializer
+
+    def get_queryset(self):
+        return Blog.objects.filter(creation_date__gt=datetime.datetime.now() - relativedelta(weeks=1)).order_by(
+            '-rating')[:6]

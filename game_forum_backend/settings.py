@@ -180,7 +180,7 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = "sendlerdjango12@gmail.com"
-EMAIL_HOST_PASSWORD = 'b7XEXxhrS'
+EMAIL_HOST_PASSWORD = 'lxethdeehhxqisbj'
 EMAIl_PORT = 587
 
 customColorPalette = [

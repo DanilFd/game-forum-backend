@@ -1,3 +1,5 @@
+import datetime
+
 from django.db.models import Avg
 from rest_framework import serializers
 
@@ -26,6 +28,9 @@ class GameDetailSerializer(serializers.ModelSerializer):
         return NewsItem.objects.filter(games=obj).count()
 
     def get_rating_of_other_users(self, obj: Game):
+        if obj.release_date > datetime.date.today():
+            return None
+
         user = self.context['request'].user
 
         if user.is_authenticated:
@@ -38,6 +43,9 @@ class GameDetailSerializer(serializers.ModelSerializer):
         )
 
     def get_user_rating(self, obj: Game):
+        if obj.release_date > datetime.date.today():
+            return None
+
         user = self.context['request'].user
         if not user.is_authenticated:
             return 0
@@ -90,4 +98,3 @@ class ModestGameSerializer(serializers.ModelSerializer):
     def get_release_date(self, obj: Game):
         month = convert_month_to_str(obj.release_date.month)
         return f"{obj.release_date.day} {month} {obj.release_date.year} г."
-

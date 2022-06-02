@@ -1,8 +1,11 @@
+import datetime
+
 from django.shortcuts import render
 
 # Create your views here.
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 
@@ -45,6 +48,8 @@ class FollowingOnGameView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
+        if Game.objects.get(id=self.kwargs['pk']).release_date > datetime.date.today():
+            raise PermissionDenied('Игра еще не вышла.')
         obj, _ = UserGameRelation.objects.get_or_create(user=self.request.user, game_id=self.kwargs['pk'])
         return obj
 

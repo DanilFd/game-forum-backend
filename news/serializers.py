@@ -16,7 +16,7 @@ class NewsItemCategorySerializer(serializers.ModelSerializer):
 class ListNewsItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "image", "creation_date", "categories", "comments_count"]
+        fields = ["id", "title", "img", "creation_date", "categories", "comments_count"]
 
     categories = NewsItemCategorySerializer(many=True)
     comments_count = serializers.SerializerMethodField()
@@ -54,7 +54,7 @@ class ListNewsCategoriesSerializer(serializers.ModelSerializer):
 class FavoritesNewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ["id", "title", "image", "creation_date", "games"]
+        fields = ["id", "title", "img", "creation_date", "games"]
 
     games = ModestGameSerializer(many=True)
 
@@ -62,7 +62,7 @@ class FavoritesNewsSerializer(serializers.ModelSerializer):
 class ModestNewsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ['id', "title", "image", "creation_date"]
+        fields = ['id', "title", "img", "creation_date"]
 
     creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
 
@@ -81,9 +81,37 @@ class NewsSourceSerializer(serializers.ModelSerializer):
 class BestsForMonthNewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsItem
-        fields = ['id', 'title', 'creation_date', 'image', 'comments_count']
+        fields = ['id', 'title', 'creation_date', 'img', 'comments_count', 'views_count']
 
     comments_count = serializers.SerializerMethodField()
 
     def get_comments_count(self, obj: NewsItem):
         return NewsComment.objects.filter(news_item_id=obj.id).count()
+
+
+class DiscussedNewsForWeekSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = ['id', 'title', 'creation_date', 'img', 'comments_count', 'creator']
+
+    creator = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, obj: NewsItem):
+        return NewsComment.objects.filter(news_item_id=obj.id).count()
+
+    def get_creator(self, obj: NewsItem):
+        return obj.creator.login
+
+
+class LastsNewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = ['id', 'title', 'creation_date', 'img', 'comments_count']
+
+    comments_count = serializers.SerializerMethodField()
+
+    creation_date = serializers.DateTimeField(format="%d.%m.%Y, %H:%M", read_only=True)
+    def get_comments_count(self, obj: NewsItem):
+        return NewsComment.objects.filter(news_item_id=obj.id).count()
+

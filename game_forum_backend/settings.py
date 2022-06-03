@@ -179,7 +179,7 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = "sendlerdjango12@gmail.com"
-EMAIL_HOST_PASSWORD = 'lxethdeehhxqisbj'
+EMAIL_HOST_PASSWORD = 'kemggjdaxtmzslhp'
 EMAIl_PORT = 587
 
 customColorPalette = [
@@ -208,8 +208,8 @@ customColorPalette = [
         'label': 'Blue'
     },
 ]
-FRONTEND_URL = "react-frt.herokuapp.com"
-BACKEND_URL = "react-bac.herokuapp.com"
+FRONTEND_URL = "localhost:3000"
+BACKEND_URL = "localhost:8000"
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['bold', 'italic', 'link',

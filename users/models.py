@@ -74,7 +74,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False, verbose_name="Superuser status",
                                        help_text='Указывает, что у этого пользователя есть все '
                                                  'разрешения без их явного назначения.')
-    rating = models.DecimalField(default=0, decimal_places=2, max_digits=6)
+    rating = models.DecimalField(default=0, decimal_places=2, max_digits=6, verbose_name='Рейтинг')
 
     USERNAME_FIELD = 'login'
 

@@ -12,6 +12,5 @@ class BlogsAdmin(admin.ModelAdmin):
     sortable_by = ['views_count', 'creation_date']
     readonly_fields = ['creator', 'img', 'rating']
 
-    def save_model(self, request, obj, form, change):
-        obj.creator = request.user
-        super().save_model(request, obj, form, change)
+    def has_add_permission(self, request, obj=None):
+        return False

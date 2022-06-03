@@ -1,19 +1,21 @@
 from django.contrib import admin
 
 # Register your models here.
-from dialogs.models import DialogMessage, Dialog, UnreadMessage
+from dialogs.models import DialogMessage, Dialog
 
 
 @admin.register(DialogMessage)
 class CategoryNewsAdmin(admin.ModelAdmin):
-    list_display = ['content', 'sender', 'sending_date']
+    readonly_fields = ['sender', 'dialog', 'content', 'sending_date']
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Dialog)
 class CategoryNewsAdmin(admin.ModelAdmin):
-    list_display = ["title", 'id']
+    exclude = ['user_that_deleted']
+    readonly_fields = ['title', 'owner', 'responder', 'creation_date']
 
-
-@admin.register(UnreadMessage)
-class TestAdmin(admin.ModelAdmin):
-    list_display = ["user", "message"]
+    def has_add_permission(self, request, obj=None):
+        return False

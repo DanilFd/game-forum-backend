@@ -7,9 +7,6 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 
-@admin.register(UserUserRelation)
-class RateUser(admin.ModelAdmin):
-    pass
 
 
 class CustomUserCreationForm(UserCreationForm):

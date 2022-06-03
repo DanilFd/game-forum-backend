@@ -27,8 +27,8 @@ class AbstractComment(models.Model):
 
     creation_date = models.DateTimeField(verbose_name="Дата публикации", auto_now_add=True)
     content = models.TextField(verbose_name="Контент", max_length=100)
-    is_deleted = models.BooleanField(verbose_name="Удален ли", default=False)
-    rating = models.IntegerField(default=0)
+    is_deleted = models.BooleanField(verbose_name="Удален", default=False)
+    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
 
     def __str__(self):
         return self.content
@@ -42,7 +42,8 @@ class NewsComment(AbstractComment):
     creator = models.ForeignKey(CustomUser, verbose_name='Создатель', on_delete=models.CASCADE)
     news_item = models.ForeignKey(NewsItem, verbose_name="Новость", on_delete=models.CASCADE,
                                   related_name="news_comments")
-    parent = models.ForeignKey('NewsComment', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
+    parent = models.ForeignKey('NewsComment', verbose_name='Родитель', on_delete=models.CASCADE, null=True, blank=True,
+                               related_name="children")
 
 
 class BlogComment(AbstractComment):
@@ -52,7 +53,8 @@ class BlogComment(AbstractComment):
 
     creator = models.ForeignKey(CustomUser, verbose_name='Создатель', on_delete=models.CASCADE)
     blog_item = models.ForeignKey(Blog, verbose_name='Блог', on_delete=models.CASCADE, related_name="blog_comments")
-    parent = models.ForeignKey('BlogComment', on_delete=models.CASCADE, null=True, blank=True, related_name="children")
+    parent = models.ForeignKey('BlogComment', verbose_name='Родитель', on_delete=models.CASCADE, null=True, blank=True,
+                               related_name="children")
 
 
 class AbstractCommentComplain(models.Model):
@@ -69,7 +71,7 @@ class AbstractCommentComplain(models.Model):
 class NewsCommentComplaint(AbstractCommentComplain):
     class Meta(AbstractCommentComplain.Meta):
         verbose_name = "Жалобу"
-        verbose_name_plural = "Жалобы"
+        verbose_name_plural = "Жалобы на комментарии к новостям"
 
     comment = models.ForeignKey(NewsComment, on_delete=models.CASCADE, verbose_name="Комментарий")
 
@@ -80,7 +82,7 @@ class NewsCommentComplaint(AbstractCommentComplain):
 class BlogCommentComplaint(AbstractCommentComplain):
     class Meta(AbstractCommentComplain.Meta):
         verbose_name = "Жалобу"
-        verbose_name_plural = "Жалобы"
+        verbose_name_plural = "Жалобы на комментарии к блогам"
 
     comment = models.ForeignKey(BlogComment, on_delete=models.CASCADE, verbose_name="Комментарий")
 

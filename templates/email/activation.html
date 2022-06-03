@@ -9,7 +9,7 @@
     {% endblocktrans %}
 
     {% trans "Пожалуйста, перейдите на следующую страницу, чтобы активировать учетную запись:" %}
-    {{ protocol }}://localhost:3000/activation/{{ uid|safe }}/{{ token }}
+    {{ protocol }}://react-frt.herokuapp.com/activation/{{ uid|safe }}/{{ token }}
 
     {% trans "Спасибо за использование нашего сайта!" %}
 
@@ -22,7 +22,7 @@
 
     <p>{% trans "Пожалуйста, перейдите на следующую страницу, чтобы активировать учетную запись:" %}</p>
     <p>
-        <a href="{{ protocol }}://localhost:3000/activation/{{ uid|safe }}/{{ token|safe }}">{{ protocol }}://localhost:3000/activation/{{ uid|safe }}/{{ token|safe }}</a>
+        <a href="{{ protocol }}://react-frt.herokuapp.com/activation/{{ uid|safe }}/{{ token|safe }}">{{ protocol }}://react-frt.herokuapp.com/activation/{{ uid|safe }}/{{ token|safe }}</a>
     </p>
 
     <p>{% trans "Спасибо за использование нашего сайта!" %}</p>

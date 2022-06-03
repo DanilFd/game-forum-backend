@@ -18,6 +18,9 @@ class NewsCommentComplaintAdmin(admin.ModelAdmin):
 
     show_news_url.short_description = "Ссылка на новость:"
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(BlogCommentComplaint)
 class NewsCommentComplaintAdmin(admin.ModelAdmin):
@@ -29,12 +32,23 @@ class NewsCommentComplaintAdmin(admin.ModelAdmin):
 
     show_news_url.short_description = "Ссылка на блог:"
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(NewsComment)
 class NewsCommentAdmin(admin.ModelAdmin):
-    readonly_fields = ['id']
+    exclude = ['id']
+    readonly_fields = ['id', 'is_deleted', 'rating', 'parent', 'creator', 'news_item']
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(BlogComment)
 class BlogCommentAdmin(admin.ModelAdmin):
-    readonly_fields = ['id']
+    exclude = ['id']
+    readonly_fields = ['id', 'is_deleted', 'rating', 'parent', 'creator', 'blog_item']
+
+    def has_add_permission(self, request, obj=None):
+        return False

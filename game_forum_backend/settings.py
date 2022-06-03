@@ -28,7 +28,6 @@ SECRET_KEY = 'django-insecure-tjx0z3k*or^r)km$cll_0ixpn5u@2ypz6)qc9*$93r53#$3j5z
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 # Application definition
 INSTALLED_APPS = [
@@ -209,8 +208,8 @@ customColorPalette = [
         'label': 'Blue'
     },
 ]
-FRONTEND_URL = "localhost:3000"
-BACKEND_URL = "localhost:8000"
+FRONTEND_URL = "react-frt.herokuapp.com"
+BACKEND_URL = "react-bac.herokuapp.com"
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['bold', 'italic', 'link',

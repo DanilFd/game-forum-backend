@@ -11,6 +11,9 @@ class CategoryNewsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
         return False
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(Dialog)
 class CategoryNewsAdmin(admin.ModelAdmin):
@@ -18,4 +21,7 @@ class CategoryNewsAdmin(admin.ModelAdmin):
     readonly_fields = ['title', 'owner', 'responder', 'creation_date']
 
     def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
         return False

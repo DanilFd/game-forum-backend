@@ -21,6 +21,9 @@ class NewsCommentComplaintAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
         return False
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(BlogCommentComplaint)
 class NewsCommentComplaintAdmin(admin.ModelAdmin):
@@ -35,6 +38,9 @@ class NewsCommentComplaintAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
         return False
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(NewsComment)
 class NewsCommentAdmin(admin.ModelAdmin):
@@ -44,6 +50,9 @@ class NewsCommentAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
         return False
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(BlogComment)
 class BlogCommentAdmin(admin.ModelAdmin):
@@ -51,4 +60,7 @@ class BlogCommentAdmin(admin.ModelAdmin):
     readonly_fields = ['id', 'is_deleted', 'rating', 'parent', 'creator', 'blog_item']
 
     def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
         return False

@@ -13,7 +13,8 @@ class GameDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ['id', 'title', 'platforms', 'genres', 'release_date', 'img', 'is_following', 'slug',
-                  'rating', 'screenshots', 'developer', 'user_rating', 'rating_of_other_users', 'news_count']
+                  'rating', 'screenshots', 'developer', 'user_rating', 'rating_of_other_users', 'news_count',
+                  'is_released']
 
     platforms = ListPlatformSerializer(many=True)
     genres = ListGenreSerializer(many=True)
@@ -23,13 +24,15 @@ class GameDetailSerializer(serializers.ModelSerializer):
     user_rating = serializers.SerializerMethodField()
     rating_of_other_users = serializers.SerializerMethodField()
     news_count = serializers.SerializerMethodField()
+    is_released = serializers.SerializerMethodField()
+
+    def get_is_released(self, obj: Game):
+        return datetime.date.today() > obj.release_date
 
     def get_news_count(self, obj: Game):
         return NewsItem.objects.filter(games=obj).count()
 
     def get_rating_of_other_users(self, obj: Game):
-        if obj.release_date > datetime.date.today():
-            return None
 
         user = self.context['request'].user
 
@@ -43,8 +46,6 @@ class GameDetailSerializer(serializers.ModelSerializer):
         )
 
     def get_user_rating(self, obj: Game):
-        if obj.release_date > datetime.date.today():
-            return None
 
         user = self.context['request'].user
         if not user.is_authenticated:

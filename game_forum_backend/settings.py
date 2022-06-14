@@ -208,7 +208,7 @@ customColorPalette = [
         'label': 'Blue'
     },
 ]
-FRONTEND_URL = "localhost:3000"
+FRONTEND_URL = "react-frt.herokuapp.com"
 BACKEND_URL = "localhost:8000"
 CKEDITOR_5_CONFIGS = {
     'default': {
